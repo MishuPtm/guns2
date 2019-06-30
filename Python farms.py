@@ -1,8 +1,9 @@
 from fileOperations import *
 
-debug = False
+debug = True
 Settings.MoveMouseDelay = 0.8
-counter = 1
+counter = 2
+minInstance = 1
 maxInstance = 5
 error = ""
 
@@ -120,13 +121,6 @@ class Farm:
         reference = Pattern("reference.png").similar(0.75).targetOffset(-42,335)
         refA = Pattern("refB.png").targetOffset(-40,348)
         refB = Pattern("refB.png").similar(0.74).targetOffset(-41,121)
-        spiritFood = Pattern("spiritFood.png").similar(0.80).targetOffset(72,17)
-        spiritWood = Pattern("spiritWood.png").similar(0.82).targetOffset(69,16)
-        smallChest = Pattern("smallChest.png").similar(0.83).targetOffset(68,16)
-        spiritIron = Pattern("spiritIron.png").similar(0.81).targetOffset(71,16)
-        spiritSilver = Pattern("spiritSilver.png").similar(0.82).targetOffset(70,15)
-        spiritSteel = Pattern("spiritSteel.png").similar(0.81).targetOffset(77,18)
-        spiritMaterialChest = Pattern("spiritMaterialChest.png").similar(0.82).targetOffset(42,17)
         increment = "increment.png"
         notAvailable = Pattern("notAvailable.png").similar(0.75)
         purchase = Pattern("purchase.png").similar(0.85).targetOffset(6,157)
@@ -134,21 +128,13 @@ class Farm:
         items = []
 
         try:
+            print(self.settings["loot"])
             for item in self.settings["loot"]:
-                if item == "iron":
-                    items.append(spiritIron)
-                elif item == "silver":
-                    items.append(spiritSilver)        
-                elif item == "food":
-                    items.append(spiritFood)
-                elif item == "wood":
-                    items.append(spiritWood)
-                elif item == "steel":
-                    items.append(spiritSteel)   
-                elif item == "chest":
-                    items.append(spiritMaterialChest)   
+                items.append(Pattern("images\\"+ item +".png").similar(0.80).targetOffset(75,15))   
         except:
-            items = [spiritFood, spiritWood]        
+            items = [
+                Pattern("images\\spiritFood.png").similar(0.80).targetOffset(72,17), 
+                Pattern("images\\spiritWood.png").similar(0.80).targetOffset(72,17)]        
         if self.tryClick(redeem, 15):
             wait(2)
             for abc in range(25):     
@@ -739,7 +725,7 @@ def closeEmu():
     if counter<maxInstance:
         counter+=1
     else:        
-        counter = 1
+        counter = minInstance
         writeLog(debug, counter, ".")
         writeLog(debug, counter, ".")
 
@@ -775,9 +761,10 @@ def getLength(image):
 
 
 if debug:    
-    instance = Farm(1)
-    launchEmu(3)
-    \instance.perfAction("gold")
+    instance = Farm(counter)
+    #launchEmu(3)
+    #instance.perfAction("gold")
+    instance.miningLoot()
 
 while not debug:
     try:

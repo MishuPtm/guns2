@@ -72,9 +72,10 @@
 <pre class="sikuli-code">
 <span class="kw">from</span> fileOperations <span class="kw">import</span> *
 
-debug = False
+debug = True
 Settings.MoveMouseDelay = <span class="dig">0.8</span>
-counter = <span class="dig">1</span>
+counter = <span class="dig">2</span>
+minInstance = <span class="dig">1</span>
 maxInstance = <span class="dig">5</span>
 error = <span class="str">""</span>
 
@@ -192,13 +193,6 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
         reference = Pattern(<img src="reference.png" />).similar(<span class="dig">0.75</span>).targetOffset(-<span class="dig">42</span>,<span class="dig">335</span>)
         refA = Pattern(<img src="refB.png" />).targetOffset(-<span class="dig">40</span>,<span class="dig">348</span>)
         refB = Pattern(<img src="refB.png" />).similar(<span class="dig">0.74</span>).targetOffset(-<span class="dig">41</span>,<span class="dig">121</span>)
-        spiritFood = Pattern(<img src="spiritFood.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">72</span>,<span class="dig">17</span>)
-        spiritWood = Pattern(<img src="spiritWood.png" />).similar(<span class="dig">0.82</span>).targetOffset(<span class="dig">69</span>,<span class="dig">16</span>)
-        smallChest = Pattern(<img src="smallChest.png" />).similar(<span class="dig">0.83</span>).targetOffset(<span class="dig">68</span>,<span class="dig">16</span>)
-        spiritIron = Pattern(<img src="spiritIron.png" />).similar(<span class="dig">0.81</span>).targetOffset(<span class="dig">71</span>,<span class="dig">16</span>)
-        spiritSilver = Pattern(<img src="spiritSilver.png" />).similar(<span class="dig">0.82</span>).targetOffset(<span class="dig">70</span>,<span class="dig">15</span>)
-        spiritSteel = Pattern(<img src="spiritSteel.png" />).similar(<span class="dig">0.81</span>).targetOffset(<span class="dig">77</span>,<span class="dig">18</span>)
-        spiritMaterialChest = Pattern(<img src="spiritMaterialChest.png" />).similar(<span class="dig">0.82</span>).targetOffset(<span class="dig">42</span>,<span class="dig">17</span>)
         increment = <img src="increment.png" />
         notAvailable = Pattern(<img src="notAvailable.png" />).similar(<span class="dig">0.75</span>)
         purchase = Pattern(<img src="purchase.png" />).similar(<span class="dig">0.85</span>).targetOffset(<span class="dig">6</span>,<span class="dig">157</span>)
@@ -206,21 +200,13 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
         items = []
 
         <span class="kw">try</span>:
+            <span class="kw">print</span>(self.settings[<span class="str">"loot"</span>])
             <span class="kw">for</span> item <span class="kw">in</span> self.settings[<span class="str">"loot"</span>]:
-                <span class="kw">if</span> item == <span class="str">"iron"</span>:
-                    items.append(spiritIron)
-                <span class="kw">elif</span> item == <span class="str">"silver"</span>:
-                    items.append(spiritSilver)
-                <span class="kw">elif</span> item == <span class="str">"food"</span>:
-                    items.append(spiritFood)
-                <span class="kw">elif</span> item == <span class="str">"wood"</span>:
-                    items.append(spiritWood)
-                <span class="kw">elif</span> item == <span class="str">"steel"</span>:
-                    items.append(spiritSteel)
-                <span class="kw">elif</span> item == <span class="str">"chest"</span>:
-                    items.append(spiritMaterialChest)
+                items.append(Pattern(<span class="str">"images\\"</span>+ item +<img src=".png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">75</span>,<span class="dig">15</span>))
         <span class="kw">except</span>:
-            items = [spiritFood, spiritWood]
+            items = [
+                Pattern(<img src="images\\spiritFood.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">72</span>,<span class="dig">17</span>),
+                Pattern(<img src="images\\spiritWood.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">72</span>,<span class="dig">17</span>)]
         <span class="kw">if</span> self.tryClick(redeem, <span class="dig">15</span>):
             <span class="skw">wait</span>(<span class="dig">2</span>)
             <span class="kw">for</span> abc <span class="kw">in</span> range(<span class="dig">25</span>):
@@ -811,7 +797,7 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
     <span class="kw">if</span> counter&lt;maxInstance:
         counter+=<span class="dig">1</span>
     <span class="kw">else</span>:
-        counter = <span class="dig">1</span>
+        counter = minInstance
         writeLog(debug, counter, <span class="str">"."</span>)
         writeLog(debug, counter, <span class="str">"."</span>)
 
@@ -847,9 +833,10 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
 
 
 <span class="kw">if</span> debug:
-    instance = Farm(<span class="dig">1</span>)
-    launchEmu(<span class="dig">3</span>)
-    \instance.perfAction(<span class="str">"gold"</span>)
+    instance = Farm(counter)
+    <span class="cmt">#launchEmu(3)
+</span>    <span class="cmt">#instance.perfAction("gold")
+</span>    instance.miningLoot()
 
 <span class="kw">while</span> <span class="kw">not</span> debug:
     <span class="kw">try</span>:
