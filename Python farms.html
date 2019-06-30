@@ -67,137 +67,30 @@
    </head>
 <body>
 <div class="info">
-<h2>Python farms.sikuli</h2> <a href="Python farms.zip">(Download this script)</a>
+<h2>fileOperations.sikuli</h2> <a href="fileOperations.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
-Settings.MoveMouseDelay = <span class="dig">0.8</span>
-delay = <span class="dig">0.6</span>
-distance = <span class="dig">240</span>
-counter = <span class="dig">1</span>
-maxInstance = <span class="dig">12</span>
-cycleCount = <span class="dig">2</span>
+<span class="kw">from</span> fileOperations <span class="kw">import</span> *
+
 debug = False
-
-<span class="cmt">#doubleClick("1543343472864.png")</span>
-shipment = Pattern(<img src="1543352147086.png" />).similar(<span class="dig">0.90</span>)
-center = Pattern(<img src="center.png" />).similar(<span class="dig">0.63</span>).targetOffset(<span class="dig">306</span>,<span class="dig">248</span>)
-xIcon = Pattern(<img src="xicon.png" />).similar(<span class="dig">0.82</span>)
-castle = Pattern(<img src="castle.png" />).similar(<span class="dig">0.43</span>)
-kingdom = Pattern(<img src="kingdom.png" />).similar(<span class="dig">0.62</span>)
-estate = Pattern(<img src="estate.png" />).similar(<span class="dig">0.66</span>)
-farm = Pattern(<img src="farm.png" />).similar(<span class="dig">0.68</span>)
-lumberyard = Pattern(<img src="lumberyard.png" />).similar(<span class="dig">0.68</span>)
-ironMine = Pattern(<img src="ironMine.png" />).similar(<span class="dig">0.65</span>)
-silverMine = Pattern(<img src="silverMine.png" />).similar(<span class="dig">0.65</span>)
-speedUp = Pattern(<img src="speedUp.png" />).similar(<span class="dig">0.60</span>)
-
-helpIcon = Pattern(<img src="helpIcon.png" />).similar(<span class="dig">0.61</span>)
-helpAllies = Pattern(<img src="helpAllies.png" />).similar(<span class="dig">0.72</span>)
-trainedTroops = <img src="trainedTroops.png" />
-
-
-
-callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</span>)
-
-
-insideBuildRef = Pattern(<img src="insideBuildRef.png" />).similar(<span class="dig">0.65</span>).targetOffset(-<span class="dig">175</span>,<span class="dig">419</span>)
-minTierSelected = Pattern(<img src="minTierSelected.png" />).similar(<span class="dig">0.85</span>)
-
-openBtn = Pattern(<img src="openBtn.png" />).similar(<span class="dig">0.75</span>)
-
-freeWeapons = <img src="1545083917425.png" />
-munitionFood = Pattern(<img src="munitionFood.png" />).targetOffset(<span class="dig">235</span>,<span class="dig">3</span>)
-
-doc = Pattern(<img src="doc.png" />).similar(<span class="dig">0.58</span>)
-greenCollect=<img src="1545382999591.png" />
-tribute = <img src="tribute.png" />
-daily = Pattern(<img src="daily.png" />).similar(<span class="dig">0.71</span>)
-unopenedDaily = <img src="unopenedDaily.png" />
-claim = <img src="1545588209547.png" />
-collect = <img src="collect.png" />
+Settings.MoveMouseDelay = <span class="dig">0.8</span>
+counter = <span class="dig">1</span>
+maxInstance = <span class="dig">5</span>
 error = <span class="str">""</span>
 
-currentRess = farm
-<span class="kw">import</span> datetime
-<span class="cmt">#logFilename = "logs\\" + unicode(datetime.datetime.now()).replace(':', '-')+".txt"</span>
-logFilename = <span class="str">"textLog.txt"</span>
-<span class="kw">def</span> writeLog(message):
-    logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now().date()).replace(<span class="str">':'</span>, <span class="str">'-'</span>)+<span class="str">".txt"</span>
-    <span class="kw">if</span> debug:
-        logFilename = <span class="str">"debug.txt"</span>
-    <span class="kw">if</span> message == <span class="str">"."</span>:
-        f = open(logFilename, <span class="str">"a+"</span>)
-        f.write(<span class="str">"=============================================================\n"</span>)
-        f.close()
-    <span class="kw">else</span>:
-        f = open(logFilename, <span class="str">"a+"</span>)
-        f.write(<span class="str">"["</span> + str(datetime.datetime.now().time()) + <span class="str">"][Farm "</span> + str(counter) + <span class="str">"]"</span>+ message + <span class="str">"\n"</span>)
-        f.close()
-<span class="kw">def</span> makeNumberIfNumber(numberString):
-    <span class="kw">try</span>:
-        number = float(numberString)
-        <span class="kw">return</span> number <span class="kw">if</span> <span class="str">'.'</span> <span class="kw">in</span> numberString <span class="kw">else</span> int(number)
-    <span class="kw">except</span>:
-        <span class="kw">return</span> numberString
-
-<span class="kw">def</span> loadSettings():
-    <span class="kw">try</span>:
-        <span class="kw">return</span> importSettings(str(counter)+<span class="str">".txt"</span>)
-    <span class="kw">except</span>:
-        <span class="kw">return</span> importSettings(<span class="str">"default.txt"</span>)
-
-<span class="kw">def</span> importSettings(fileName):
-    <span class="kw">print</span> <span class="str">'Reading settings'</span>
-    f = open(fileName, <span class="str">"r"</span>)
-    settingsLines = f.read().split(<span class="str">"\n"</span>)
-    f.close()
-    settings = {}
-    <span class="kw">for</span> line <span class="kw">in</span> settingsLines:
-        <span class="kw">if</span> len(line.strip()) == <span class="dig">0</span>:
-            <span class="kw">continue</span>
-        splitted = line.split(<span class="str">":"</span>)
-        settingName = splitted[<span class="dig">0</span>].strip()
-        settingValue = splitted[<span class="dig">1</span>].strip()
-        <span class="kw">if</span> settingValue.lower() <span class="kw">in</span> [<span class="str">"true"</span>, <span class="str">"false"</span>]:
-            settingValue = settingValue == <span class="str">"true"</span>
-        <span class="kw">elif</span> <span class="str">","</span> <span class="kw">in</span> settingValue:
-            <span class="cmt">#this means setting is an array</span>
-            settingValue = [makeNumberIfNumber(x.strip()) <span class="kw">for</span> x <span class="kw">in</span> settingValue.split(<span class="str">','</span>)]
-
-        settings[settingName] = makeNumberIfNumber(settingValue)
-
-    <span class="kw">return</span>  settings
-<span class="kw">def</span> stringToPattern(text):
-    switcher = {
-        <span class="str">"lumberyard"</span>:lumberyard,
-        <span class="str">"farm"</span>:farm,
-        <span class="str">"ironMine"</span>:ironMine,
-        <span class="str">"wood"</span>:lumberyard,
-        <span class="str">"food"</span>:farm,
-        <span class="str">"iron"</span>:ironMine,
-        <span class="str">"silver"</span>:silverMine,
-        <span class="str">"castle"</span>:castle
-        }
-    <span class="kw">return</span> switcher.get(text, shipment)
-<span class="kw">def</span> getLength(image):
-    x=<span class="dig">0</span>
-    <span class="kw">try</span>:
-
-        mm =  findAll(image)
-        <span class="kw">while</span> mm.hasNext():
-            mm.next()
-            <span class="cmt">#finding existing patterns</span>
-            x+=<span class="dig">1</span>
-    <span class="kw">except</span>:
-        <span class="kw">pass</span>
-    <span class="kw">return</span> x
+xIcon = Pattern(<img src="xicon.png" />).similar(<span class="dig">0.82</span>)
+kingdom = Pattern(<img src="kingdom.png" />).similar(<span class="dig">0.62</span>)
+estate = Pattern(<img src="estate.png" />).similar(<span class="dig">0.66</span>)
+callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</span>)
 
 <span class="kw">class</span> Farm:
-    <span class="kw">def</span> __init__(self, number):
-        self.number = number
-        self.settings = loadSettings()
+    <span class="kw">def</span> __init__(self, nb):
+        self.number = nb
+        self.settings = loadSettings(nb)
+
 
     <span class="kw">def</span> start(self):
+        shipment = Pattern(<img src="1543352147086.png" />).similar(<span class="dig">0.90</span>)
         <span class="kw">if</span> self.tryClick(shipment, <span class="dig">3</span>):
             <span class="skw">wait</span>(<span class="dig">12</span>)
         self.tryClick(xIcon, <span class="dig">1</span>)
@@ -209,6 +102,7 @@ logFilename = <span class="str">"textLog.txt"</span>
         <span class="kw">if</span> <span class="kw">not</span> self.tryClick(estate, <span class="dig">15</span>):
             self.tryClick(estate, <span class="dig">5</span>)
         <span class="skw">wait</span>(<span class="dig">2</span>)
+
 
     <span class="kw">def</span> donate(self):
         allianceIcon = Pattern(<img src="allianceIcon.png" />).similar(<span class="dig">0.74</span>)
@@ -237,23 +131,28 @@ logFilename = <span class="str">"textLog.txt"</span>
         self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
 
+
     <span class="kw">def</span> doc(self):
-        <span class="kw">if</span> self.findOverview(<span class="str">"doc"</span>):
+        greenCollect=<img src="1545382999591.png" />
+        <span class="kw">if</span> self.findOverview(<img src="ovDoc.png" />):
             <span class="kw">if</span> self.tryClick(greenCollect, <span class="dig">5</span>):
-                writeLog(<span class="str">"Doc delivery collected"</span>)
+                writeLog(debug, self.number, <span class="str">"Doc delivery collected"</span>)
                 <span class="skw">wait</span>(<span class="dig">7</span>)
         <span class="kw">else</span>:
-            writeLog(<span class="str">"No doc delivery available"</span>)
+            writeLog(debug, self.number, <span class="str">"No doc delivery available"</span>)
+
+
     <span class="kw">def</span> tribute(self):
+        collect = <img src="collect.png" />
         <span class="kw">if</span> self.findOverview(<span class="str">"gift"</span>):
             <span class="kw">if</span> self.tryClick(collect, <span class="dig">5</span>):
                 <span class="skw">wait</span>(<span class="dig">7</span>)
-                writeLog(<span class="str">"Tribute collected"</span>)
+                writeLog(debug, self.number, <span class="str">"Tribute collected"</span>)
         <span class="kw">else</span>:
-            writeLog(<span class="str">"No tribute available"</span>)
+            writeLog(debug, self.number, <span class="str">"No tribute available"</span>)
+
 
     <span class="kw">def</span> spiritMines(self):
-
         blueYes = <img src="blueYes.png" />
         redYes = <img src="redYes.png" />
         miningArea = Pattern(<img src="miningArea.png" />).similar(<span class="dig">0.60</span>)
@@ -261,8 +160,6 @@ logFilename = <span class="str">"textLog.txt"</span>
         stepOut = <img src="stepOut.png" />
         emptyMine = Pattern(<img src="emptyMine.png" />).similar(<span class="dig">0.90</span>)
         minesOccupy = <img src="minesOccupy.png" />
-
-
         <span class="kw">if</span> <span class="kw">not</span> exists(Pattern(<img src="1546086058601.png" />).similar(<span class="dig">0.84</span>), <span class="dig">10</span>):
             self.miningLoot()
             <span class="skw">wait</span>(<span class="dig">4</span>)
@@ -273,13 +170,12 @@ logFilename = <span class="str">"textLog.txt"</span>
             tryClicks(miningArea, <span class="dig">5</span>,<span class="dig">2</span>)
             self.tryClick(redYes, <span class="dig">5</span>)
             <span class="skw">wait</span>(<span class="dig">7</span>)
-
             self.tryClick(emptyMine, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">3</span>)
             self.tryClick(minesOccupy, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">5</span>)
             <span class="kw">if</span> self.sendTroops():
-                writeLog(<span class="str">"Gathering crystals"</span>)
+                writeLog(debug, self.number, <span class="str">"Gathering crystals"</span>)
             <span class="skw">wait</span>(<span class="dig">1</span>)
             self.tryClick(exitBtn, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">1</span>)
@@ -289,6 +185,7 @@ logFilename = <span class="str">"textLog.txt"</span>
             <span class="skw">wait</span>(<span class="dig">2</span>)
             self.tryClick(estate, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
+
 
     <span class="kw">def</span> miningLoot(self):
         redeem = <img src="redeem.png" />
@@ -306,8 +203,8 @@ logFilename = <span class="str">"textLog.txt"</span>
         notAvailable = Pattern(<img src="notAvailable.png" />).similar(<span class="dig">0.75</span>)
         purchase = Pattern(<img src="purchase.png" />).similar(<span class="dig">0.85</span>).targetOffset(<span class="dig">6</span>,<span class="dig">157</span>)
         backIcon = <img src="backIcon.png" />
-
         items = []
+
         <span class="kw">try</span>:
             <span class="kw">for</span> item <span class="kw">in</span> self.settings[<span class="str">"loot"</span>]:
                 <span class="kw">if</span> item == <span class="str">"iron"</span>:
@@ -324,12 +221,10 @@ logFilename = <span class="str">"textLog.txt"</span>
                     items.append(spiritMaterialChest)
         <span class="kw">except</span>:
             items = [spiritFood, spiritWood]
-
         <span class="kw">if</span> self.tryClick(redeem, <span class="dig">15</span>):
             <span class="skw">wait</span>(<span class="dig">2</span>)
             <span class="kw">for</span> abc <span class="kw">in</span> range(<span class="dig">25</span>):
                 x = len(items) -<span class="dig">1</span>
-
                 <span class="kw">while</span> x &gt;=<span class="dig">0</span>:
                     <span class="kw">if</span> self.tryClick(items[x], <span class="dig">1</span>):
                         <span class="kw">if</span> exists(notAvailable):
@@ -347,12 +242,13 @@ logFilename = <span class="str">"textLog.txt"</span>
                 <span class="skw">wait</span>(<span class="dig">1</span>)
                 <span class="kw">if</span> len(items) == <span class="dig">0</span>:
                     <span class="kw">break</span>
-
             self.tryClick(backIcon, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">1</span>)
             self.tryClick(backIcon, <span class="dig">1</span>)
         <span class="kw">else</span>:
-            writeLog(<span class="str">"Cannot click redeem"</span>)
+            writeLog(debug, self.number, <span class="str">"Cannot click redeem"</span>)
+
+
     <span class="kw">def</span> swipe(self, refA, refB):
         <span class="kw">try</span>:
             <span class="skw">dragDrop</span>(refA, refB)
@@ -362,6 +258,8 @@ logFilename = <span class="str">"textLog.txt"</span>
 
 
     <span class="kw">def</span> train(self, troop):
+        insideBuildRef = Pattern(<img src="insideBuildRef.png" />).similar(<span class="dig">0.65</span>).targetOffset(-<span class="dig">175</span>,<span class="dig">419</span>)
+        minTierSelected = Pattern(<img src="minTierSelected.png" />).similar(<span class="dig">0.85</span>)
         trainIcon = Pattern(<img src="trainIcon.png" />).similar(<span class="dig">0.62</span>)
         troopsTraining = Pattern(<img src="troopsTraining.png" />).similar(<span class="dig">0.74</span>)
         center = Pattern(<img src="center.png" />).targetOffset(<span class="dig">282</span>,<span class="dig">184</span>)
@@ -376,7 +274,6 @@ logFilename = <span class="str">"textLog.txt"</span>
                 <span class="kw">if</span> exists(troopsTraining):
                     <span class="skw">wait</span> (<span class="dig">2</span>)
                     self.tryClick(xIcon, <span class="dig">1</span>)
-
                 <span class="kw">if</span> self.settings[<span class="str">"trainMinLevel"</span>] <span class="kw">and</span> exists(insideBuildRef, <span class="dig">2</span>):
                     i = <span class="dig">0</span>
                     <span class="kw">while</span> <span class="kw">not</span> exists(minTierSelected, <span class="dig">1</span>):
@@ -385,15 +282,15 @@ logFilename = <span class="str">"textLog.txt"</span>
                         <span class="kw">if</span> i&gt;<span class="dig">12</span>:
                             <span class="kw">break</span>
                         i += <span class="dig">1</span>
-
                 <span class="kw">if</span> self.tryClick(trainBtn, <span class="dig">4</span>):
                     <span class="kw">if</span> <span class="kw">not</span> exists(<img src="1559069415235.png" />, <span class="dig">5</span>):
-                        writeLog(<span class="str">"Training "</span> + troop)
+                        writeLog(debug, self.number, <span class="str">"Training "</span> + troop)
                         <span class="skw">wait</span>(<span class="dig">3</span>)
                         self.tryClick(xIcon, <span class="dig">2</span>)
                     <span class="kw">else</span>:
                         <span class="kw">if</span> self.openFood():
                             self.train(troop)
+
 
     <span class="kw">def</span> tryClick(self, pattern, period):
         <span class="kw">if</span> exists(pattern, period):
@@ -402,14 +299,17 @@ logFilename = <span class="str">"textLog.txt"</span>
             setFindFailedResponse(ABORT)
             <span class="kw">return</span> True
 
+
     <span class="kw">def</span> center(self, pattern):
         <span class="kw">try</span>:
-            <span class="skw">wait</span>(<span class="dig">1</span>)
-            <span class="kw">if</span> exists(pattern, <span class="dig">4</span>):
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
+            <span class="kw">if</span> exists(pattern, <span class="dig">1</span>):
                 <span class="skw">dragDrop</span>(pattern, Pattern(<img src="1543427171194.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">290</span>,<span class="dig">162</span>))
             <span class="kw">return</span> True
         <span class="kw">except</span>:
             <span class="kw">return</span> False
+
+
     <span class="kw">def</span> findOverview(self, item):
         ovBarracks = Pattern(<img src="ovBarracks.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
         ovStables = Pattern(<img src="ovStables.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">197</span>,<span class="dig">0</span>)
@@ -419,6 +319,10 @@ logFilename = <span class="str">"textLog.txt"</span>
         ovGift = Pattern(<img src="ovGift.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
         ovDoc = Pattern(<img src="ovDoc.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
         image = ovDoc
+        <span class="kw">try</span>:
+            image = Pattern(<span class="str">"images\\"</span>+item).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
+        <span class="kw">except</span>:
+            <span class="kw">pass</span>
         <span class="kw">if</span> item == <span class="str">"barracks"</span> <span class="kw">or</span> item == <span class="str">"inf"</span>:
             image = ovBarracks
         <span class="kw">elif</span> item == <span class="str">"stables"</span> <span class="kw">or</span> item == <span class="str">"cav"</span>:
@@ -433,8 +337,6 @@ logFilename = <span class="str">"textLog.txt"</span>
             image = ovGift
         <span class="kw">elif</span> item == <span class="str">"doc"</span>:
             image = ovDoc
-
-
         expandOverview = Pattern(<img src="expandOverview.png" />).similar(<span class="dig">0.80</span>)
         collapseOverview = Pattern(<img src="collapseOverview.png" />).similar(<span class="dig">0.80</span>)
         <span class="kw">if</span> self.tryClick(expandOverview, <span class="dig">5</span>):
@@ -449,7 +351,7 @@ logFilename = <span class="str">"textLog.txt"</span>
                     scrolls=<span class="dig">0</span>
                     <span class="skw">wait</span>(<span class="dig">1.5</span>)
                     <span class="kw">if</span> exists(Pattern(<img src="1557431003983.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">0</span>,<span class="dig">10</span>),<span class="dig">0.5</span>):
-                        writeLog(<span class="str">"Unable to click "</span> + str(image))
+                        writeLog(debug, self.number, <span class="str">"Unable to click "</span> + str(image))
                     <span class="kw">else</span>:
                         <span class="kw">return</span> True
         <span class="kw">else</span>:
@@ -457,6 +359,8 @@ logFilename = <span class="str">"textLog.txt"</span>
                 self.findOverview(item)
         self.tryClick(collapseOverview, <span class="dig">2</span>)
         <span class="kw">return</span> False
+
+
     <span class="kw">def</span> wall(self):
         burning = Pattern(<img src="burning.png" />).similar(<span class="dig">0.66</span>)
         wallDamaged = Pattern(<img src="wallDamaged.png" />).similar(<span class="dig">0.60</span>)
@@ -465,26 +369,37 @@ logFilename = <span class="str">"textLog.txt"</span>
         extinguish = <img src="extinguish.png" />
         repairWall = <img src="repairWall.png" />
         self.navigate([<span class="dig">2</span>, <span class="dig">2</span>, <span class="dig">2</span>, <span class="dig">2</span>, <span class="dig">4</span>, <span class="dig">4</span>, <span class="dig">4</span>, <span class="dig">4</span>, <span class="dig">4</span>])
+
         <span class="kw">if</span> self.tryClick(wallDamaged, <span class="dig">2</span>):
             <span class="skw">wait</span>(<span class="dig">2</span>)
+
             <span class="kw">if</span> <span class="kw">not</span> boolAttack:
                 self.tryClick(extinguish, <span class="dig">2</span>)
-                writeLog(<span class="str">"Extinguising fire"</span>)
+                writeLog(debug, self.number, <span class="str">"Extinguising fire"</span>)
+
             <span class="kw">if</span> self.tryClick(repairWall, <span class="dig">2</span>):
-                writeLog(<span class="str">"Repairing wall"</span>)
+                writeLog(debug, self.number, <span class="str">"Repairing wall"</span>)
+
             <span class="skw">wait</span>(<span class="dig">0.5</span>)
             self.tryClick(xIcon, <span class="dig">2</span>)
+
+
     <span class="kw">def</span> navigate(self, moves):
         self.findTopLeft()
         <span class="kw">for</span> move <span class="kw">in</span> moves:
             self.move(move)
+
+
     <span class="kw">def</span> upgrade(self):
         tipsBtn = Pattern(<img src="tipsBtn.png" />).similar(<span class="dig">0.76</span>)
         tipsIcon= Pattern(<img src="tipsIcon.png" />).similar(<span class="dig">0.77</span>)
         upgradeIcon = Pattern(<img src="upgradeIcon.png" />).similar(<span class="dig">0.58</span>)
+        helpIcon = Pattern(<img src="helpIcon.png" />).similar(<span class="dig">0.61</span>)
+        speedUp = Pattern(<img src="speedUp.png" />).similar(<span class="dig">0.60</span>)
         upgradeBtn = Pattern(<img src="upgradeBtn.png" />).exact()
         goTo = Pattern(<img src="goTo.png" />).similar(<span class="dig">0.68</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
+
         <span class="kw">if</span> self.tryClick(tipsIcon, <span class="dig">1</span>):
             <span class="skw">wait</span>(<span class="dig">3</span>)
             self.tryClick(tipsBtn, <span class="dig">2</span>)
@@ -497,14 +412,15 @@ logFilename = <span class="str">"textLog.txt"</span>
         <span class="skw">wait</span>(<span class="dig">1</span>)
 
         <span class="kw">if</span> <span class="kw">not</span> exists(upgradeIcon) <span class="kw">and</span> <span class="kw">not</span> exists(speedUp):
-            writeLog(<span class="str">"clicking again in center"</span>)
+            writeLog(debug, self.number, <span class="str">"clicking again in center"</span>)
             hover(Pattern(<img src="1543427171194.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">283</span>,<span class="dig">208</span>))
             <span class="skw">wait</span>(<span class="dig">1</span>)
             mouseDown(Button.LEFT)
             mouseUp()
             <span class="skw">wait</span>(<span class="dig">1</span>)
+
             <span class="kw">if</span> <span class="kw">not</span> exists(upgradeIcon) <span class="kw">and</span> <span class="kw">not</span> exists(speedUp):
-                writeLog(<span class="str">"clicking again in center"</span>)
+                writeLog(debug, self.number, <span class="str">"clicking again in center"</span>)
                 hover(Pattern(<img src="1543427171194.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">283</span>,<span class="dig">208</span>))
                 <span class="skw">wait</span>(<span class="dig">1</span>)
                 mouseDown(Button.LEFT)
@@ -519,33 +435,37 @@ logFilename = <span class="str">"textLog.txt"</span>
             <span class="kw">else</span>:
                 <span class="kw">if</span> self.tryClick(upgradeBtn, <span class="dig">2</span>):
                     <span class="kw">if</span> self.tryClick(helpIcon, <span class="dig">2</span>):
-                        writeLog(<span class="str">"Building upgraded"</span>)
+                        writeLog(debug, self.number, <span class="str">"Building upgraded"</span>)
                 <span class="skw">wait</span>(<span class="dig">1</span>)
                 self.tryClick(xIcon, <span class="dig">1</span>)
                 <span class="skw">wait</span>(<span class="dig">1</span>)
                 self.tryClick(xIcon, <span class="dig">1</span>)
-                writeLog(<span class="str">"Not enough resources to upgrade"</span>)
+                writeLog(debug, self.number, <span class="str">"Not enough resources to upgrade"</span>)
 
         <span class="kw">else</span>:
            <span class="kw">if</span> exists(speedUp):
-               writeLog(<span class="str">"Upgrade already in progress"</span>)
+               writeLog(debug, self.number, <span class="str">"Upgrade already in progress"</span>)
                self.tryBuild = False
-            <span class="cmt">#if upgrade icon not available#</span>
-
+            <span class="cmt">#if upgrade icon not available#
+</span>
 
     <span class="kw">def</span> openGoldChest(self):
         goldChest = Pattern(<img src="goldChest.png" />).similar(<span class="dig">0.89</span>)
+        openBtn = Pattern(<img src="openBtn.png" />).similar(<span class="dig">0.75</span>)
         <span class="kw">if</span> self.tryClick(goldChest, <span class="dig">5</span>):
             <span class="skw">wait</span>(<span class="dig">5</span>)
-            writeLog(<span class="str">"Found gold chest"</span>)
+            writeLog(debug, self.number, <span class="str">"Found gold chest"</span>)
             <span class="kw">while</span> self.tryClick(openBtn, <span class="dig">2</span>):
                 <span class="skw">wait</span>(<span class="dig">3</span>)
             <span class="skw">wait</span>(<span class="dig">1</span>)
-            writeLog(<span class="str">"Opened all chests"</span>)
+            writeLog(debug, self.number, <span class="str">"Opened all chests"</span>)
             self.tryClick(xIcon, <span class="dig">2</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
             self.tryClick(xIcon, <span class="dig">2</span>)
+
+
     <span class="kw">def</span> allianceGather(self):
+        center = Pattern(<img src="center.png" />).similar(<span class="dig">0.63</span>).targetOffset(<span class="dig">306</span>,<span class="dig">248</span>)
         alliance = <img src="alliance.png" />
         territory = <img src="territory.png" />
         alliResources = <img src="alliResources.png" />
@@ -565,17 +485,19 @@ logFilename = <span class="str">"textLog.txt"</span>
                     self.tryClick(center,<span class="dig">1</span>)
                     <span class="skw">wait</span>(<span class="dig">2</span>)
                 <span class="kw">if</span> exists(callBack, <span class="dig">1</span>):
-                    writeLog(<span class="str">"Already gathering alliance mine"</span>)
+                    writeLog(debug, self.number, <span class="str">"Already gathering alliance mine"</span>)
                 <span class="kw">elif</span> self.tryClick(gather, <span class="dig">2</span>):
                     <span class="skw">wait</span>(<span class="dig">4</span>)
                     <span class="kw">if</span> self.sendTroops():
-                        writeLog(<span class="str">"Gathering alliance mine"</span>)
+                        writeLog(debug, self.number, <span class="str">"Gathering alliance mine"</span>)
                         <span class="skw">wait</span>(<span class="dig">3</span>)
 
             self.tryClick(xIcon, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
             self.tryClick(estate, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">1</span>)
+
+
     <span class="kw">def</span> sendTroops(self):
         equalizeBtn = Pattern(<img src="equalizeBtn.png" />).similar(<span class="dig">0.80</span>)
         marchBtn = Pattern(<img src="marchBtn.png" />).similar(<span class="dig">0.60</span>).targetOffset(-<span class="dig">1</span>,<span class="dig">13</span>)
@@ -588,6 +510,7 @@ logFilename = <span class="str">"textLog.txt"</span>
             self.tryClick(equalizeBtn, <span class="dig">1</span>)
             <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">return</span> self.tryClick(marchBtn, <span class="dig">8</span>)
+
 
     <span class="kw">def</span> openFood(self):
         items = <img src="items.png" />
@@ -612,8 +535,9 @@ logFilename = <span class="str">"textLog.txt"</span>
             <span class="skw">wait</span>(<span class="dig">2</span>)
             self.tryClick(xIcon, <span class="dig">2</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
-        writeLog(<span class="str">"Failed to open Food item"</span>)
+        writeLog(debug, self.number, <span class="str">"Failed to open Food item"</span>)
         <span class="kw">return</span> False
+
 
     <span class="kw">def</span> gather(self, resources):
         resourceBusy = Pattern(<img src="resourceBusy.png" />).similar(<span class="dig">0.68</span>)
@@ -628,10 +552,9 @@ logFilename = <span class="str">"textLog.txt"</span>
         steps = <span class="dig">1</span>
         marches = self.getAvailableMarch()
         <span class="kw">if</span> marches &gt; <span class="dig">0</span>:
-            writeLog(str(marches) + <span class="str">" marches available, gathering "</span> + str(self.settings[<span class="str">"gatherRess"</span>]))
+            writeLog(debug, self.number, str(marches) + <span class="str">" marches available, gathering "</span> + str(self.settings[<span class="str">"gatherRess"</span>]))
         <span class="kw">else</span>:
-            writeLog(<span class="str">"No available marches"</span>)
-
+            writeLog(debug, self.number, <span class="str">"No available marches"</span>)
 
         <span class="kw">while</span> steps &lt; maxSteps*maxSteps <span class="kw">and</span> marches &gt; <span class="dig">0</span>:
             <span class="kw">if</span> steps % maxSteps == <span class="dig">0</span>:
@@ -672,7 +595,7 @@ logFilename = <span class="str">"textLog.txt"</span>
                                 marches = <span class="dig">0</span>
                             <span class="kw">else</span>:
                                 marches -= <span class="dig">1</span>
-                                writeLog(<span class="str">"Found "</span> + str(resource))
+                                writeLog(debug, self.number, <span class="str">"Found "</span> + str(resource))
                                 <span class="skw">wait</span>(<span class="dig">2</span>)
                                 self.move(dir1)
                                 self.move(dir1)
@@ -684,9 +607,11 @@ logFilename = <span class="str">"textLog.txt"</span>
                         self.move(dir1)
         self.tryClick(estate, <span class="dig">2</span>)
 
-    <span class="kw">def</span> move(self, direction):
-        <span class="cmt">#1 up, 2 down, 3 left, 4, right</span>
-        <span class="kw">try</span>:
+
+    <span class="kw">def</span> move(self, direction, distance = <span class="dig">240</span>):
+        delay = <span class="dig">0.6</span>
+        <span class="cmt">#1 up, 2 down, 3 left, 4, right
+</span>        <span class="kw">try</span>:
             center = Pattern(<img src="1543427171194.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">288</span>,<span class="dig">211</span>)
 
             hover(center)
@@ -704,7 +629,10 @@ logFilename = <span class="str">"textLog.txt"</span>
             mouseUp()
         <span class="kw">except</span>:
             self.tryClick(xIcon, <span class="dig">1</span>)
+
+
     <span class="kw">def</span> findCastle(self):
+        castle = Pattern(<img src="castle.png" />).similar(<span class="dig">0.43</span>)
         <span class="skw">wait</span>(<span class="dig">2</span>)
         self.findTopLeft()
         self.move(<span class="dig">2</span>)
@@ -716,10 +644,12 @@ logFilename = <span class="str">"textLog.txt"</span>
             <span class="kw">return</span> True
         <span class="kw">else</span>:
             <span class="kw">return</span> False
-    <span class="cmt">#def base(self):</span>
+
 
     <span class="kw">def</span> munitionExchange(self, ress):
         gunsIcon = <img src="gunsIcon.png" />
+        helpAllies = Pattern(<img src="helpAllies.png" />).similar(<span class="dig">0.72</span>)
+        freeWeapons = <img src="1545083917425.png" />
         <span class="skw">wait</span>(<span class="dig">2</span>)
         self.findTopLeft()
         self.move(<span class="dig">2</span>)
@@ -728,7 +658,7 @@ logFilename = <span class="str">"textLog.txt"</span>
         self.move(<span class="dig">4</span>)
         self.move(<span class="dig">4</span>)
         <span class="kw">if</span> self.tryClick(gunsIcon, <span class="dig">2</span>):
-            writeLog(<span class="str">"Found munition exchange"</span>)
+            writeLog(debug, self.number, <span class="str">"Found munition exchange"</span>)
             <span class="skw">wait</span>(<span class="dig">4</span>)
             x=<span class="dig">0</span>
             <span class="kw">while</span> exists(freeWeapons) <span class="kw">and</span> x &lt; <span class="dig">12</span>:
@@ -737,10 +667,12 @@ logFilename = <span class="str">"textLog.txt"</span>
                 <span class="skw">wait</span>(<span class="dig">2</span>)
             self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="kw">else</span>:
-            writeLog(<span class="str">"No free weapons"</span>)
+            writeLog(debug, self.number, <span class="str">"No free weapons"</span>)
         <span class="kw">if</span> self.tryClick(helpAllies, <span class="dig">2</span>):
-            writeLog(<span class="str">"Helped allies"</span>)
+            writeLog(debug, self.number, <span class="str">"Helped allies"</span>)
             <span class="skw">wait</span>(<span class="dig">2</span>)
+
+
     <span class="kw">def</span> findTopLeft (self):
         <span class="kw">if</span> exists(kingdom, <span class="dig">1</span>):
             steps = <span class="dig">0</span>
@@ -748,8 +680,8 @@ logFilename = <span class="str">"textLog.txt"</span>
                 self.move(<span class="dig">1</span>)
                 self.move(<span class="dig">3</span>)
                 steps += <span class="dig">1</span>
-
         <span class="kw">return</span> exists(Pattern(<img src="1544040185056.png" />).similar(<span class="dig">0.62</span>), <span class="dig">1</span>)
+
 
     <span class="kw">def</span> findBottomRight (self):
         <span class="kw">if</span> exists(kingdom, <span class="dig">1</span>):
@@ -764,20 +696,19 @@ logFilename = <span class="str">"textLog.txt"</span>
 
 
     <span class="kw">def</span> perfAction(self, action):
-
+            munitionFood = Pattern(<img src="munitionFood.png" />).targetOffset(<span class="dig">235</span>,<span class="dig">3</span>)
             <span class="skw">wait</span>(<span class="dig">3</span>)
             <span class="kw">if</span> action == <span class="str">"train"</span>:
                 <span class="kw">for</span> troop <span class="kw">in</span> self.settings[<span class="str">"troopsToTrain"</span>]:
                     self.train(troop)
             <span class="kw">elif</span> action == <span class="str">"gather"</span>:
-
                 test = []
                 <span class="kw">for</span> ress <span class="kw">in</span> self.settings[<span class="str">"gatherRess"</span>]:
                     <span class="kw">if</span> <span class="kw">not</span> ress == None:
                         test.append(stringToPattern(ress))
                 self.gather(test)
             <span class="kw">elif</span> action == <span class="str">"upgrade"</span>:
-                writeLog(<span class="str">"Upgrading"</span>)
+                writeLog(debug, self.number, <span class="str">"Upgrading"</span>)
                 self.findCastle()
                 self.upgrade()
             <span class="kw">elif</span> action == <span class="str">"gold"</span>:
@@ -790,18 +721,20 @@ logFilename = <span class="str">"textLog.txt"</span>
                 self.tribute()
             <span class="kw">elif</span> action == <span class="str">"spirit"</span>:
                 <span class="kw">if</span> self.findOverview(<span class="str">"spirit"</span>):
-                    writeLog(<span class="str">"Can gather crystal"</span>)
+                    writeLog(debug, self.number, <span class="str">"Can gather crystal"</span>)
                     self.spiritMines()
                 <span class="kw">else</span>:
-                    writeLog(<span class="str">"Gathering crystals already"</span>)
+                    writeLog(debug, self.number, <span class="str">"Gathering crystals already"</span>)
             <span class="kw">elif</span> action == <span class="str">"donate"</span>:
                 self.donate()
             <span class="kw">elif</span> action == <span class="str">"allianceGather"</span>:
                 self.allianceGather()
             <span class="kw">elif</span> action == <span class="str">"wall"</span>:
                 self.wall()
+
+
     <span class="kw">def</span> recover(self):
-        writeLog(<span class="str">"Attempting recovery"</span>)
+        writeLog(debug, self.number, <span class="str">"Attempting recovery"</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
         succes = False
         <span class="kw">if</span> self.tryClick(xIcon, <span class="dig">1</span>):
@@ -812,6 +745,7 @@ logFilename = <span class="str">"textLog.txt"</span>
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">return</span> succes
 
+
     <span class="kw">def</span> getAvailableMarch(self):
         x=<span class="dig">0</span>
         self.tryClick(Pattern(<img src="1550403558215.png" />).similar(<span class="dig">0.55</span>), <span class="dig">2</span>)
@@ -819,24 +753,19 @@ logFilename = <span class="str">"textLog.txt"</span>
             mm =  findAll(Pattern(<img src="1544560966058.png" />).similar(<span class="dig">0.69</span>))
             <span class="kw">while</span> mm.hasNext():
                 mm.next()
-                <span class="cmt">#finding troops on the move</span>
-                x+=<span class="dig">1</span>
+                <span class="cmt">#finding troops on the move
+</span>                x+=<span class="dig">1</span>
         <span class="kw">except</span>:
             <span class="kw">pass</span>
         <span class="kw">try</span>:
             nn = findAll(Pattern(<img src="1544560981707.png" />).similar(<span class="dig">0.57</span>))
             <span class="kw">while</span> nn.hasNext(): <span class="cmt"># loop as long there is a first and more matches</span>
-                <span class="cmt">#finding troops gathering</span>
-                nn.next()
+                <span class="cmt">#finding troops gathering
+</span>                nn.next()
                 x+=<span class="dig">1</span>
         <span class="kw">except</span>:
             <span class="kw">pass</span>
-
         <span class="kw">return</span> self.settings[<span class="str">"availableMarch"</span>]-x
-
-
-
-
 
 
 
@@ -847,8 +776,10 @@ logFilename = <span class="str">"textLog.txt"</span>
     mouseDown(Button.LEFT)
     mouseUp()
     <span class="kw">if</span> tryClick(<img src="1543346082405.png" />, <span class="dig">150</span>):
-        writeLog(<span class="str">"Starting farm"</span>)
+        writeLog(debug, counter, <span class="str">"Starting farm"</span>)
     <span class="skw">wait</span>(xIcon, <span class="dig">150</span>)
+
+
 <span class="kw">def</span> tryClick(pattern, time):
     <span class="kw">if</span> exists(pattern, time):
         <span class="kw">try</span>:
@@ -857,13 +788,17 @@ logFilename = <span class="str">"textLog.txt"</span>
         <span class="kw">except</span>:
             <span class="kw">pass</span>
     <span class="kw">return</span> False
+
+
 <span class="kw">def</span> tryClicks(pattern, time, repeats):
     i = repeats
     <span class="kw">while</span> <span class="kw">not</span> tryClick(pattern, time) <span class="kw">and</span> i&gt;<span class="dig">0</span>:
         i-=<span class="dig">1</span>
+
+
 <span class="kw">def</span> closeEmu():
     <span class="kw">if</span> <span class="kw">not</span> error == <span class="str">""</span>:
-            writeLog(error)
+            writeLog(debug, counter, error)
     closeBtn = <img src="closeBtn.png" />
     operation = <img src="operations.png" />
     messagePopup = Pattern(<img src="1544174098594.png" />).targetOffset(<span class="dig">82</span>,<span class="dig">1</span>)
@@ -876,34 +811,57 @@ logFilename = <span class="str">"textLog.txt"</span>
     <span class="kw">if</span> counter&lt;maxInstance:
         counter+=<span class="dig">1</span>
     <span class="kw">else</span>:
-
         counter = <span class="dig">1</span>
-        writeLog(<span class="str">"."</span>)
-        writeLog(<span class="str">"."</span>)
+        writeLog(debug, counter, <span class="str">"."</span>)
+        writeLog(debug, counter, <span class="str">"."</span>)
 
-<span class="cmt">#launchEmu(counter)</span>
+
+<span class="kw">def</span> stringToPattern(text):
+    farm = Pattern(<img src="farm.png" />).similar(<span class="dig">0.68</span>)
+    lumberyard = Pattern(<img src="lumberyard.png" />).similar(<span class="dig">0.68</span>)
+    ironMine = Pattern(<img src="ironMine.png" />).similar(<span class="dig">0.65</span>)
+    silverMine = Pattern(<img src="silverMine.png" />).similar(<span class="dig">0.65</span>)
+    switcher = {
+        <span class="str">"lumberyard"</span>:lumberyard,
+        <span class="str">"farm"</span>:farm,
+        <span class="str">"ironMine"</span>:ironMine,
+        <span class="str">"wood"</span>:lumberyard,
+        <span class="str">"food"</span>:farm,
+        <span class="str">"iron"</span>:ironMine,
+        <span class="str">"silver"</span>:silverMine,
+        }
+    <span class="kw">return</span> switcher.get(text, None)
+
+<span class="kw">def</span> getLength(image):
+    x=<span class="dig">0</span>
+    <span class="kw">try</span>:
+
+        mm =  findAll(image)
+        <span class="kw">while</span> mm.hasNext():
+            mm.next()
+            <span class="cmt">#finding existing patterns
+</span>            x+=<span class="dig">1</span>
+    <span class="kw">except</span>:
+        <span class="kw">pass</span>
+    <span class="kw">return</span> x
+
 
 <span class="kw">if</span> debug:
     instance = Farm(<span class="dig">1</span>)
-    <span class="cmt">#instance.start()</span>
-    list = [farm]
-    <span class="cmt">#closeEmu()</span>
-    <span class="cmt">#instance.spiritMines()</span>
-    <span class="cmt">#instance.train()</span>
+    launchEmu(<span class="dig">3</span>)
+    \instance.perfAction(<span class="str">"gold"</span>)
 
-    <span class="cmt">#instance.spiritMines()</span>
-    instance.perfAction(<span class="str">"wall"</span>)
 <span class="kw">while</span> <span class="kw">not</span> debug:
     <span class="kw">try</span>:
         error = <span class="str">"------Unhandled exception------"</span>
         launchEmu(counter)
-        instance = Farm(<span class="dig">1</span>)
+        instance = Farm(counter)
         instance.start()
         <span class="kw">for</span> action <span class="kw">in</span> instance.settings[<span class="str">"actions"</span>]:
             instance.perfAction(action)
         error = <span class="str">""</span>
         closeEmu()
-        writeLog(<span class="str">"."</span>)
+        writeLog(debug, instance.number, <span class="str">"."</span>)
     <span class="kw">except</span> FindFailed, e:
         error = str(e)
         closeEmu()

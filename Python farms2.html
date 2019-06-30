@@ -67,7 +67,7 @@
    </head>
 <body>
 <div class="info">
-<h2>Python farms.sikuli</h2> <a href="Python farms.zip">(Download this script)</a>
+<h2>fileOperations.sikuli</h2> <a href="fileOperations.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
 Settings.MoveMouseDelay = <span class="dig">0.8</span>
@@ -77,8 +77,8 @@ counter = <span class="dig">1</span>
 maxInstance = <span class="dig">8</span>
 cycleCount = <span class="dig">2</span>
 
-<span class="cmt">#doubleClick("1543343472864.png")</span>
-shipment = Pattern(<img src="1543352147086.png" />).similar(<span class="dig">0.90</span>)
+<span class="cmt">#doubleClick("1543343472864.png")
+</span>shipment = Pattern(<img src="1543352147086.png" />).similar(<span class="dig">0.90</span>)
 xIcon = Pattern(<img src="xicon.png" />).similar(<span class="dig">0.80</span>)
 barracks = Pattern(<img src="barracks.png" />).similar(<span class="dig">0.71</span>)
 artillery = Pattern(<img src="artillery.png" />).similar(<span class="dig">0.71</span>)
@@ -125,8 +125,8 @@ munitionFood = <img src="munitionFood.png" />
 currentRess = farm
 <span class="kw">import</span> datetime
 logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now()).replace(<span class="str">':'</span>, <span class="str">'-'</span>)+<span class="str">".txt"</span>
-<span class="cmt">#logFilename = "textLog.txt"</span>
-<span class="kw">def</span> writeLog(message):
+<span class="cmt">#logFilename = "textLog.txt"
+</span><span class="kw">def</span> writeLog(message):
     <span class="kw">if</span> True:
         f = open(logFilename, <span class="str">"a+"</span>)
         f.write(<span class="str">"["</span> + str(datetime.datetime.now()) + <span class="str">"][Farm "</span> + str(counter) + <span class="str">"]"</span>+ message + <span class="str">"\n"</span>)
@@ -160,8 +160,8 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
         <span class="kw">if</span> settingValue.lower() <span class="kw">in</span> [<span class="str">"true"</span>, <span class="str">"false"</span>]:
             settingValue = settingValue == <span class="str">"true"</span>
         <span class="kw">elif</span> <span class="str">","</span> <span class="kw">in</span> settingValue:
-            <span class="cmt">#this means setting is an array</span>
-            settingValue = [makeNumberIfNumber(x.strip()) <span class="kw">for</span> x <span class="kw">in</span> settingValue.split(<span class="str">','</span>)]
+            <span class="cmt">#this means setting is an array
+</span>            settingValue = [makeNumberIfNumber(x.strip()) <span class="kw">for</span> x <span class="kw">in</span> settingValue.split(<span class="str">','</span>)]
 
         settings[settingName] = makeNumberIfNumber(settingValue)
 
@@ -194,10 +194,10 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
         self.tryClick(xIcon, <span class="dig">1</span>)
 
     <span class="kw">def</span> scan(self):
-        <span class="cmt">#self.tryClick(trainedTroops, 1)</span>
-        <span class="cmt">#self.tryClick(wood, 1)</span>
-        <span class="cmt">#self.tryClick(food, 1)</span>
-        i = len(self.army)-<span class="dig">1</span>
+        <span class="cmt">#self.tryClick(trainedTroops, 1)
+</span>        <span class="cmt">#self.tryClick(wood, 1)
+</span>        <span class="cmt">#self.tryClick(food, 1)
+</span>        i = len(self.army)-<span class="dig">1</span>
         <span class="kw">while</span> i&gt;=<span class="dig">0</span>:
 
             <span class="kw">if</span> exists(self.army[i]):
@@ -207,8 +207,8 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
             i-=<span class="dig">1</span>
     <span class="kw">def</span> train(self, building):
 
-        <span class="cmt">#writeLog(str(resource))</span>
-        self.center(building)
+        <span class="cmt">#writeLog(str(resource))
+</span>        self.center(building)
         self.tryClick(building, <span class="dig">2</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">if</span> exists(trainIcon, <span class="dig">2</span>):
@@ -284,8 +284,8 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
            <span class="kw">if</span> exists(speedUp):
                writeLog(<span class="str">"Upgrade already in progress"</span>)
                self.tryBuild = False
-            <span class="cmt">#if upgrade icon not available#</span>
-
+            <span class="cmt">#if upgrade icon not available#
+</span>
 
     <span class="kw">def</span> openGoldChest(self):
         <span class="kw">if</span> self.tryClick(goldChest, <span class="dig">5</span>):
@@ -366,8 +366,8 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
         self.tryClick(estate, <span class="dig">2</span>)
 
     <span class="kw">def</span> move(self, direction):
-        <span class="cmt">#1 up, 2 down, 3 left, 4, right</span>
-        center = Pattern(<img src="1543427171194.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">288</span>,<span class="dig">211</span>)
+        <span class="cmt">#1 up, 2 down, 3 left, 4, right
+</span>        center = Pattern(<img src="1543427171194.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">288</span>,<span class="dig">211</span>)
 
         hover(center)
         mouseDown(Button.LEFT)
@@ -395,8 +395,8 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
             <span class="kw">return</span> True
         <span class="kw">else</span>:
             <span class="kw">return</span> False
-    <span class="cmt">#def base(self):</span>
-
+    <span class="cmt">#def base(self):
+</span>
     <span class="kw">def</span> munitionExchange(self, ress):
         <span class="skw">wait</span>(<span class="dig">2</span>)
         self.findTopLeft()
@@ -477,15 +477,15 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
             mm =  findAll(Pattern(<img src="1544560966058.png" />).similar(<span class="dig">0.69</span>))
             <span class="kw">while</span> mm.hasNext():
                 mm.next()
-                <span class="cmt">#finding troops on the move</span>
-                x+=<span class="dig">1</span>
+                <span class="cmt">#finding troops on the move
+</span>                x+=<span class="dig">1</span>
         <span class="kw">except</span>:
             <span class="kw">pass</span>
         <span class="kw">try</span>:
             nn = findAll(Pattern(<img src="1544560981707.png" />).similar(<span class="dig">0.57</span>))
             <span class="kw">while</span> nn.hasNext(): <span class="cmt"># loop as long there is a first and more matches</span>
-                <span class="cmt">#finding troops gathering</span>
-                nn.next()
+                <span class="cmt">#finding troops gathering
+</span>                nn.next()
                 x+=<span class="dig">1</span>
         <span class="kw">except</span>:
             <span class="kw">pass</span>
@@ -535,11 +535,11 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
                 currentRess = farm
 
 
-<span class="cmt">#launchEmu(counter)</span>
-<span class="cmt">#instance = Farm(1)</span>
-<span class="cmt">#instance.start()</span>
-<span class="cmt">#instance.perfActions()</span>
-
+<span class="cmt">#launchEmu(counter)
+</span><span class="cmt">#instance = Farm(1)
+</span><span class="cmt">#instance.start()
+</span><span class="cmt">#instance.perfActions()
+</span>
 <span class="kw">while</span> True:
     <span class="kw">try</span>:
         launchEmu(counter)
@@ -549,8 +549,8 @@ logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now(
         writeLog(<span class="str">"Actions finished, closing instance"</span>)
         closeEmu()
     <span class="kw">except</span>:
-        <span class="cmt">#writeLog("[WARNING]Action failed, closing instance")</span>
-        closeEmu()
+        <span class="cmt">#writeLog("[WARNING]Action failed, closing instance")
+</span>        closeEmu()
     <span class="skw">wait</span>(<span class="dig">5</span>)
 </pre>
 </body>

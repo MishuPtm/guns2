@@ -1,0 +1,125 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>fileOperations.sikuli</h2> <a href="fileOperations.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> datetime
+
+
+<span class="kw">def</span> writeLog(debug, counter, message):
+    logFilename = <span class="str">"logs\\"</span> + unicode(datetime.datetime.now().date()).replace(<span class="str">':'</span>, <span class="str">'-'</span>)+<span class="str">".txt"</span>
+    <span class="kw">if</span> debug:
+        logFilename = <span class="str">"debug.txt"</span>
+    <span class="kw">if</span> message == <span class="str">"."</span>:
+        f = open(logFilename, <span class="str">"a+"</span>)
+        f.write(<span class="str">"=============================================================\n"</span>)
+        f.close()
+    <span class="kw">else</span>:
+        f = open(logFilename, <span class="str">"a+"</span>)
+        f.write(<span class="str">"["</span> + str(datetime.datetime.now().time()) + <span class="str">"][Farm "</span> + str(counter) + <span class="str">"]"</span>+ message + <span class="str">"\n"</span>)
+        f.close()
+<span class="kw">def</span> makeNumberIfNumber(numberString):
+    <span class="kw">try</span>:
+        number = float(numberString)
+        <span class="kw">return</span> number <span class="kw">if</span> <span class="str">'.'</span> <span class="kw">in</span> numberString <span class="kw">else</span> int(number)
+    <span class="kw">except</span>:
+        <span class="kw">return</span> numberString
+
+<span class="kw">def</span> loadSettings(counter):
+    <span class="kw">try</span>:
+        <span class="kw">return</span> importSettings(str(counter)+<span class="str">".txt"</span>)
+    <span class="kw">except</span>:
+        <span class="kw">return</span> importSettings(<span class="str">"default.txt"</span>)
+
+
+<span class="kw">def</span> importSettings(fileName):
+    <span class="kw">print</span> <span class="str">'Reading settings'</span>
+    f = open(fileName, <span class="str">"r"</span>)
+    settingsLines = f.read().split(<span class="str">"\n"</span>)
+    f.close()
+    settings = {}
+    <span class="kw">for</span> line <span class="kw">in</span> settingsLines:
+        <span class="kw">if</span> len(line.strip()) == <span class="dig">0</span>:
+            <span class="kw">continue</span>
+        splitted = line.split(<span class="str">":"</span>)
+        settingName = splitted[<span class="dig">0</span>].strip()
+        settingValue = splitted[<span class="dig">1</span>].strip()
+        <span class="kw">if</span> settingValue.lower() <span class="kw">in</span> [<span class="str">"true"</span>, <span class="str">"false"</span>]:
+            settingValue = settingValue == <span class="str">"true"</span>
+        <span class="kw">elif</span> <span class="str">","</span> <span class="kw">in</span> settingValue:
+            <span class="cmt">#this means setting is an array
+</span>            settingValue = [makeNumberIfNumber(x.strip()) <span class="kw">for</span> x <span class="kw">in</span> settingValue.split(<span class="str">','</span>)]
+
+        settings[settingName] = makeNumberIfNumber(settingValue)
+
+    <span class="kw">return</span>  settings
+</pre>
+</body>
+</html>

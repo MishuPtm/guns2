@@ -1,131 +1,24 @@
-Settings.MoveMouseDelay = 0.8
-delay = 0.6
-distance = 240
-counter = 1
-maxInstance = 12
-cycleCount = 2
+from fileOperations import *
+
 debug = False
-
-#doubleClick("1543343472864.png")
-shipment = Pattern("1543352147086.png").similar(0.90)
-center = Pattern("center.png").similar(0.63).targetOffset(306,248)
-xIcon = Pattern("xicon.png").similar(0.82)
-castle = Pattern("castle.png").similar(0.43)
-kingdom = Pattern("kingdom.png").similar(0.62)
-estate = Pattern("estate.png").similar(0.66)
-farm = Pattern("farm.png").similar(0.68)
-lumberyard = Pattern("lumberyard.png").similar(0.68)
-ironMine = Pattern("ironMine.png").similar(0.65)
-silverMine = Pattern("silverMine.png").similar(0.65)
-speedUp = Pattern("speedUp.png").similar(0.60)
-
-helpIcon = Pattern("helpIcon.png").similar(0.61)
-helpAllies = Pattern("helpAllies.png").similar(0.72)
-trainedTroops = "trainedTroops.png"
-
-
-
-callBack = Pattern("callBack.png").similar(0.65)
-
-
-insideBuildRef = Pattern("insideBuildRef.png").similar(0.65).targetOffset(-175,419)
-minTierSelected = Pattern("minTierSelected.png").similar(0.85)
-
-openBtn = Pattern("openBtn.png").similar(0.75)
-
-freeWeapons = "1545083917425.png"
-munitionFood = Pattern("munitionFood.png").targetOffset(235,3)
-
-doc = Pattern("doc.png").similar(0.58)
-greenCollect="1545382999591.png"
-tribute = "tribute.png"
-daily = Pattern("daily.png").similar(0.71)
-unopenedDaily = "unopenedDaily.png"
-claim = "1545588209547.png"
-collect = "collect.png"
+Settings.MoveMouseDelay = 0.8
+counter = 1
+maxInstance = 5
 error = ""
 
-currentRess = farm
-import datetime
-#logFilename = "logs\\" + unicode(datetime.datetime.now()).replace(':', '-')+".txt"
-logFilename = "textLog.txt"
-def writeLog(message):
-    logFilename = "logs\\" + unicode(datetime.datetime.now().date()).replace(':', '-')+".txt" 
-    if debug:
-        logFilename = "debug.txt"
-    if message == ".":
-        f = open(logFilename, "a+")
-        f.write("=============================================================\n")
-        f.close()
-    else:
-        f = open(logFilename, "a+")
-        f.write("[" + str(datetime.datetime.now().time()) + "][Farm " + str(counter) + "]"+ message + "\n")
-        f.close()
-def makeNumberIfNumber(numberString):
-    try:
-        number = float(numberString)
-        return number if '.' in numberString else int(number)
-    except:
-        return numberString
-
-def loadSettings():
-    try:
-        return importSettings(str(counter)+".txt")
-    except:
-        return importSettings("default.txt")
-    
-def importSettings(fileName):
-    print 'Reading settings'
-    f = open(fileName, "r")
-    settingsLines = f.read().split("\n")
-    f.close()
-    settings = {}
-    for line in settingsLines:
-        if len(line.strip()) == 0:
-            continue
-        splitted = line.split(":")
-        settingName = splitted[0].strip()
-        settingValue = splitted[1].strip()
-        if settingValue.lower() in ["true", "false"]:
-            settingValue = settingValue == "true"
-        elif "," in settingValue:
-            #this means setting is an array
-            settingValue = [makeNumberIfNumber(x.strip()) for x in settingValue.split(',')]
-            
-        settings[settingName] = makeNumberIfNumber(settingValue)
-    
-    return  settings
-def stringToPattern(text):
-    switcher = {
-        "lumberyard":lumberyard,
-        "farm":farm,
-        "ironMine":ironMine,
-        "wood":lumberyard,
-        "food":farm,
-        "iron":ironMine,
-        "silver":silverMine,
-        "castle":castle
-        }
-    return switcher.get(text, shipment)
-def getLength(image):
-    x=0
-    try:
-        
-        mm =  findAll(image)
-        while mm.hasNext():
-            mm.next()
-            #finding existing patterns
-            x+=1
-    except:
-        pass
-    return x
+xIcon = Pattern("xicon.png").similar(0.82)
+kingdom = Pattern("kingdom.png").similar(0.62)
+estate = Pattern("estate.png").similar(0.66)
+callBack = Pattern("callBack.png").similar(0.65)
 
 class Farm:
-    def __init__(self, number):
-        self.number = number
-        self.settings = loadSettings()
+    def __init__(self, nb):
+        self.number = nb
+        self.settings = loadSettings(nb)
         
-    def start(self):           
+
+    def start(self):   
+        shipment = Pattern("1543352147086.png").similar(0.90)
         if self.tryClick(shipment, 3):
             wait(12)
         self.tryClick(xIcon, 1)
@@ -138,6 +31,7 @@ class Farm:
             self.tryClick(estate, 5)
         wait(2)
            
+
     def donate(self):
         allianceIcon = Pattern("allianceIcon.png").similar(0.74)
         donations = "donations.png"
@@ -165,32 +59,35 @@ class Farm:
         self.tryClick(xIcon, 1)
         wait(1)
         
-    def doc(self):
-        if self.findOverview("doc"):
+
+    def doc(self):        
+        greenCollect="1545382999591.png"
+        if self.findOverview("ovDoc.png"):
             if self.tryClick(greenCollect, 5):
-                writeLog("Doc delivery collected")
+                writeLog(debug, self.number, "Doc delivery collected")
                 wait(7)
         else:
-            writeLog("No doc delivery available")
-    def tribute(self):            
+            writeLog(debug, self.number, "No doc delivery available")
+
+
+    def tribute(self):  
+        collect = "collect.png"
         if self.findOverview("gift"):
             if self.tryClick(collect, 5):   
                 wait(7)
-                writeLog("Tribute collected")
+                writeLog(debug, self.number, "Tribute collected")
         else:
-            writeLog("No tribute available")
+            writeLog(debug, self.number, "No tribute available")
  
-    def spiritMines(self):
-        
+
+    def spiritMines(self):        
         blueYes = "blueYes.png"
         redYes = "redYes.png"
         miningArea = Pattern("miningArea.png").similar(0.60)
         exitBtn = "exitBtn.png"
         stepOut = "stepOut.png"
         emptyMine = Pattern("emptyMine.png").similar(0.90)
-        minesOccupy = "minesOccupy.png"
-        
-        
+        minesOccupy = "minesOccupy.png"        
         if not exists(Pattern("1546086058601.png").similar(0.84), 10):
             self.miningLoot()
             wait(4)
@@ -200,14 +97,13 @@ class Farm:
                 wait(5)
             tryClicks(miningArea, 5,2)
             self.tryClick(redYes, 5)
-            wait(7)
-            
+            wait(7)            
             self.tryClick(emptyMine, 1)
             wait(3)
             self.tryClick(minesOccupy, 1)
             wait(5)
             if self.sendTroops():
-                writeLog("Gathering crystals")
+                writeLog(debug, self.number, "Gathering crystals")
             wait(1)
             self.tryClick(exitBtn, 1)
             wait(1)
@@ -218,6 +114,7 @@ class Farm:
             self.tryClick(estate, 1)
             wait(2)        
         
+
     def miningLoot(self):
         redeem = "redeem.png"
         reference = Pattern("reference.png").similar(0.75).targetOffset(-42,335)
@@ -233,9 +130,9 @@ class Farm:
         increment = "increment.png"
         notAvailable = Pattern("notAvailable.png").similar(0.75)
         purchase = Pattern("purchase.png").similar(0.85).targetOffset(6,157)
-        backIcon = "backIcon.png"
-        
+        backIcon = "backIcon.png"        
         items = []
+
         try:
             for item in self.settings["loot"]:
                 if item == "iron":
@@ -251,13 +148,11 @@ class Farm:
                 elif item == "chest":
                     items.append(spiritMaterialChest)   
         except:
-            items = [spiritFood, spiritWood]
-        
+            items = [spiritFood, spiritWood]        
         if self.tryClick(redeem, 15):
             wait(2)
             for abc in range(25):     
-                x = len(items) -1
-                
+                x = len(items) -1                
                 while x >=0:
                     if self.tryClick(items[x], 1):
                         if exists(notAvailable):
@@ -274,13 +169,14 @@ class Farm:
                 self.swipe(refA, refB)                
                 wait(1)
                 if len(items) == 0:
-                    break
-                
+                    break                
             self.tryClick(backIcon, 1)
             wait(1)
             self.tryClick(backIcon, 1)
         else:
-            writeLog("Cannot click redeem")
+            writeLog(debug, self.number, "Cannot click redeem")
+
+
     def swipe(self, refA, refB):
         try:
             dragDrop(refA, refB)
@@ -289,7 +185,9 @@ class Farm:
             return False
             
         
-    def train(self, troop):  
+    def train(self, troop):          
+        insideBuildRef = Pattern("insideBuildRef.png").similar(0.65).targetOffset(-175,419)
+        minTierSelected = Pattern("minTierSelected.png").similar(0.85)
         trainIcon = Pattern("trainIcon.png").similar(0.62)
         troopsTraining = Pattern("troopsTraining.png").similar(0.74)
         center = Pattern("center.png").targetOffset(282,184)
@@ -303,8 +201,7 @@ class Farm:
                 wait(2)
                 if exists(troopsTraining):
                     wait (2)
-                    self.tryClick(xIcon, 1)
-                
+                    self.tryClick(xIcon, 1)                
                 if self.settings["trainMinLevel"] and exists(insideBuildRef, 2):
                     i = 0
                     while not exists(minTierSelected, 1):
@@ -312,16 +209,16 @@ class Farm:
                         
                         if i>12:
                             break
-                        i += 1
-                    
+                        i += 1                    
                 if self.tryClick(trainBtn, 4):
                     if not exists("1559069415235.png", 5):
-                        writeLog("Training " + troop)
+                        writeLog(debug, self.number, "Training " + troop)
                         wait(3)
                         self.tryClick(xIcon, 2)
                     else:
                         if self.openFood():
                             self.train(troop)
+
 
     def tryClick(self, pattern, period):
         if exists(pattern, period):
@@ -329,15 +226,18 @@ class Farm:
             click(pattern)
             setFindFailedResponse(ABORT)
             return True
+
     
     def center(self, pattern):
         try:
-            wait(1)
-            if exists(pattern, 4):
+            wait(0.5)
+            if exists(pattern, 1):
                 dragDrop(pattern, Pattern("1543427171194.png").similar(0.80).targetOffset(290,162))
             return True
         except:
             return False
+
+
     def findOverview(self, item):
         ovBarracks = Pattern("ovBarracks.png").similar(0.80).targetOffset(200,0)
         ovStables = Pattern("ovStables.png").similar(0.80).targetOffset(197,0)
@@ -347,6 +247,10 @@ class Farm:
         ovGift = Pattern("ovGift.png").similar(0.80).targetOffset(200,0)
         ovDoc = Pattern("ovDoc.png").similar(0.80).targetOffset(200,0)
         image = ovDoc
+        try:
+            image = Pattern("images\\"+item).similar(0.80).targetOffset(200,0)
+        except:
+            pass
         if item == "barracks" or item == "inf":
             image = ovBarracks
         elif item == "stables" or item == "cav":
@@ -360,9 +264,7 @@ class Farm:
         elif item == "gift":
             image = ovGift
         elif item == "doc":
-            image = ovDoc
-        
-        
+            image = ovDoc        
         expandOverview = Pattern("expandOverview.png").similar(0.80)  
         collapseOverview = Pattern("collapseOverview.png").similar(0.80)
         if self.tryClick(expandOverview, 5):
@@ -377,7 +279,7 @@ class Farm:
                     scrolls=0
                     wait(1.5)
                     if exists(Pattern("1557431003983.png").similar(0.80).targetOffset(0,10),0.5):
-                        writeLog("Unable to click " + str(image))
+                        writeLog(debug, self.number, "Unable to click " + str(image))
                     else:    
                         return True
         else:
@@ -385,6 +287,8 @@ class Farm:
                 self.findOverview(item)
         self.tryClick(collapseOverview, 2) 
         return False  
+
+
     def wall(self):
         burning = Pattern("burning.png").similar(0.66)
         wallDamaged = Pattern("wallDamaged.png").similar(0.60)
@@ -393,26 +297,37 @@ class Farm:
         extinguish = "extinguish.png"
         repairWall = "repairWall.png"
         self.navigate([2, 2, 2, 2, 4, 4, 4, 4, 4])
+
         if self.tryClick(wallDamaged, 2):
             wait(2)
+
             if not boolAttack:
                 self.tryClick(extinguish, 2)
-                writeLog("Extinguising fire")
+                writeLog(debug, self.number, "Extinguising fire")
+
             if self.tryClick(repairWall, 2):
-                writeLog("Repairing wall")
+                writeLog(debug, self.number, "Repairing wall")
+                
             wait(0.5)
             self.tryClick(xIcon, 2)
+
+
     def navigate(self, moves):
         self.findTopLeft()
         for move in moves:
             self.move(move)
+
+
     def upgrade(self):
         tipsBtn = Pattern("tipsBtn.png").similar(0.76)
         tipsIcon= Pattern("tipsIcon.png").similar(0.77)
         upgradeIcon = Pattern("upgradeIcon.png").similar(0.58)
+        helpIcon = Pattern("helpIcon.png").similar(0.61)
+        speedUp = Pattern("speedUp.png").similar(0.60)
         upgradeBtn = Pattern("upgradeBtn.png").exact()
         goTo = Pattern("goTo.png").similar(0.68)
         wait(1)
+
         if self.tryClick(tipsIcon, 1):
             wait(3)
             self.tryClick(tipsBtn, 2)
@@ -425,14 +340,15 @@ class Farm:
         wait(1)  
             
         if not exists(upgradeIcon) and not exists(speedUp):
-            writeLog("clicking again in center")
+            writeLog(debug, self.number, "clicking again in center")
             hover(Pattern("1543427171194.png").similar(0.80).targetOffset(283,208))
             wait(1)
             mouseDown(Button.LEFT)
             mouseUp()
             wait(1)  
+
             if not exists(upgradeIcon) and not exists(speedUp):
-                writeLog("clicking again in center")
+                writeLog(debug, self.number, "clicking again in center")
                 hover(Pattern("1543427171194.png").similar(0.80).targetOffset(283,208))
                 wait(1)
                 mouseDown(Button.LEFT)
@@ -447,33 +363,37 @@ class Farm:
             else:
                 if self.tryClick(upgradeBtn, 2):
                     if self.tryClick(helpIcon, 2):
-                        writeLog("Building upgraded")
+                        writeLog(debug, self.number, "Building upgraded")
                 wait(1)
                 self.tryClick(xIcon, 1)
                 wait(1)
                 self.tryClick(xIcon, 1)
-                writeLog("Not enough resources to upgrade")
+                writeLog(debug, self.number, "Not enough resources to upgrade")
                 
         else:
            if exists(speedUp):
-               writeLog("Upgrade already in progress")
+               writeLog(debug, self.number, "Upgrade already in progress")
                self.tryBuild = False
             #if upgrade icon not available#
              
         
     def openGoldChest(self):
         goldChest = Pattern("goldChest.png").similar(0.89)
+        openBtn = Pattern("openBtn.png").similar(0.75)
         if self.tryClick(goldChest, 5):
             wait(5)
-            writeLog("Found gold chest")
+            writeLog(debug, self.number, "Found gold chest")
             while self.tryClick(openBtn, 2):              
                 wait(3)  
             wait(1)
-            writeLog("Opened all chests")
+            writeLog(debug, self.number, "Opened all chests")
             self.tryClick(xIcon, 2)
             wait(2)
             self.tryClick(xIcon, 2)
+
+
     def allianceGather(self):
+        center = Pattern("center.png").similar(0.63).targetOffset(306,248)
         alliance = "alliance.png"
         territory = "territory.png"
         alliResources = "alliResources.png"
@@ -493,17 +413,19 @@ class Farm:
                     self.tryClick(center,1)
                     wait(2)
                 if exists(callBack, 1):
-                    writeLog("Already gathering alliance mine")
+                    writeLog(debug, self.number, "Already gathering alliance mine")
                 elif self.tryClick(gather, 2):
                     wait(4)    
                     if self.sendTroops():
-                        writeLog("Gathering alliance mine")
+                        writeLog(debug, self.number, "Gathering alliance mine")
                         wait(3)   
             
             self.tryClick(xIcon, 1)
             wait(2)
             self.tryClick(estate, 1)
             wait(1)
+
+
     def sendTroops(self):
         equalizeBtn = Pattern("equalizeBtn.png").similar(0.80)
         marchBtn = Pattern("marchBtn.png").similar(0.60).targetOffset(-1,13)
@@ -517,6 +439,7 @@ class Farm:
             wait(1)
         return self.tryClick(marchBtn, 8)
     
+
     def openFood(self):
         items = "items.png"
         resources = "resources.png"
@@ -540,9 +463,10 @@ class Farm:
             wait(2)
             self.tryClick(xIcon, 2)
             wait(2)
-        writeLog("Failed to open Food item")
+        writeLog(debug, self.number, "Failed to open Food item")
         return False
     
+
     def gather(self, resources):
         resourceBusy = Pattern("resourceBusy.png").similar(0.68)
         marchFull = Pattern("marchFull.png").similar(0.68)
@@ -556,10 +480,9 @@ class Farm:
         steps = 1
         marches = self.getAvailableMarch()
         if marches > 0:
-            writeLog(str(marches) + " marches available, gathering " + str(self.settings["gatherRess"]))
+            writeLog(debug, self.number, str(marches) + " marches available, gathering " + str(self.settings["gatherRess"]))
         else: 
-            writeLog("No available marches")  
-                   
+            writeLog(debug, self.number, "No available marches")                     
             
         while steps < maxSteps*maxSteps and marches > 0:
             if steps % maxSteps == 0:
@@ -600,7 +523,7 @@ class Farm:
                                 marches = 0
                             else:
                                 marches -= 1
-                                writeLog("Found " + str(resource))
+                                writeLog(debug, self.number, "Found " + str(resource))
                                 wait(2)
                                 self.move(dir1)
                                 self.move(dir1)
@@ -612,7 +535,9 @@ class Farm:
                         self.move(dir1)
         self.tryClick(estate, 2)     
                 
-    def move(self, direction):
+
+    def move(self, direction, distance = 240):
+        delay = 0.6
         #1 up, 2 down, 3 left, 4, right
         try:
             center = Pattern("1543427171194.png").similar(0.80).targetOffset(288,211)
@@ -632,7 +557,10 @@ class Farm:
             mouseUp()
         except:
             self.tryClick(xIcon, 1)
+
+
     def findCastle(self):
+        castle = Pattern("castle.png").similar(0.43)
         wait(2)
         self.findTopLeft()
         self.move(2)
@@ -644,10 +572,12 @@ class Farm:
             return True
         else:
             return False
-    #def base(self):
+
 
     def munitionExchange(self, ress):
         gunsIcon = "gunsIcon.png"
+        helpAllies = Pattern("helpAllies.png").similar(0.72)
+        freeWeapons = "1545083917425.png"
         wait(2)
         self.findTopLeft()
         self.move(2)
@@ -656,7 +586,7 @@ class Farm:
         self.move(4)
         self.move(4)
         if self.tryClick(gunsIcon, 2):
-            writeLog("Found munition exchange")
+            writeLog(debug, self.number, "Found munition exchange")
             wait(4)
             x=0
             while exists(freeWeapons) and x < 12:
@@ -665,20 +595,22 @@ class Farm:
                 wait(2)
             self.tryClick(xIcon, 1)
         else:
-            writeLog("No free weapons")
+            writeLog(debug, self.number, "No free weapons")
         if self.tryClick(helpAllies, 2):
-            writeLog("Helped allies")
+            writeLog(debug, self.number, "Helped allies")
             wait(2)
+
+
     def findTopLeft (self):
         if exists(kingdom, 1): 
             steps = 0
             while not exists(Pattern("1544040185056.png").similar(0.62), 1) and steps < 20:
                 self.move(1)
                 self.move(3)
-                steps += 1
-                
+                steps += 1                
         return exists(Pattern("1544040185056.png").similar(0.62), 1)
              
+
     def findBottomRight (self):
         if exists(kingdom, 1):
             while not exists(Pattern("1544040235407.png").similar(0.68), 1):
@@ -692,20 +624,19 @@ class Farm:
 
     
     def perfAction(self, action):
-        
+            munitionFood = Pattern("munitionFood.png").targetOffset(235,3)
             wait(3)
             if action == "train":
                 for troop in self.settings["troopsToTrain"]:                    
                     self.train(troop)
-            elif action == "gather":
-                
+            elif action == "gather":                
                 test = []
                 for ress in self.settings["gatherRess"]:
                     if not ress == None:
                         test.append(stringToPattern(ress))
                 self.gather(test)
             elif action == "upgrade":
-                writeLog("Upgrading")
+                writeLog(debug, self.number, "Upgrading")
                 self.findCastle()
                 self.upgrade()
             elif action == "gold":
@@ -718,18 +649,20 @@ class Farm:
                 self.tribute()
             elif action == "spirit":
                 if self.findOverview("spirit"):
-                    writeLog("Can gather crystal")
+                    writeLog(debug, self.number, "Can gather crystal")
                     self.spiritMines()
                 else:
-                    writeLog("Gathering crystals already")
+                    writeLog(debug, self.number, "Gathering crystals already")
             elif action == "donate":
                 self.donate()
             elif action == "allianceGather":
                 self.allianceGather()
             elif action == "wall":
                 self.wall()
+
+
     def recover(self):
-        writeLog("Attempting recovery")
+        writeLog(debug, self.number, "Attempting recovery")
         wait(1)
         succes = False
         if self.tryClick(xIcon, 1):
@@ -739,6 +672,7 @@ class Farm:
             success = True
         wait(1)
         return succes
+
     
     def getAvailableMarch(self):
         x=0
@@ -758,13 +692,8 @@ class Farm:
                 nn.next()
                 x+=1
         except:
-            pass
-            
-        return self.settings["availableMarch"]-x
-                
-        
-
-                        
+            pass            
+        return self.settings["availableMarch"]-x                   
 
                         
                         
@@ -775,8 +704,10 @@ def launchEmu(instance):
     mouseDown(Button.LEFT)
     mouseUp()  
     if tryClick("1543346082405.png", 150):
-        writeLog("Starting farm")
+        writeLog(debug, counter, "Starting farm")
     wait(xIcon, 150)
+
+
 def tryClick(pattern, time):
     if exists(pattern, time):
         try:
@@ -785,13 +716,17 @@ def tryClick(pattern, time):
         except:
             pass
     return False
+
+
 def tryClicks(pattern, time, repeats):
     i = repeats
     while not tryClick(pattern, time) and i>0:
         i-=1
+
+
 def closeEmu():
     if not error == "":
-            writeLog(error)
+            writeLog(debug, counter, error)
     closeBtn = "closeBtn.png"
     operation = "operations.png"
     messagePopup = Pattern("1544174098594.png").targetOffset(82,1)
@@ -803,35 +738,58 @@ def closeEmu():
         wait(0.2)
     if counter<maxInstance:
         counter+=1
-    else:
-        
+    else:        
         counter = 1
-        writeLog(".")
-        writeLog(".")
+        writeLog(debug, counter, ".")
+        writeLog(debug, counter, ".")
 
-#launchEmu(counter)
+
+def stringToPattern(text):
+    farm = Pattern("farm.png").similar(0.68)
+    lumberyard = Pattern("lumberyard.png").similar(0.68)
+    ironMine = Pattern("ironMine.png").similar(0.65)
+    silverMine = Pattern("silverMine.png").similar(0.65)
+    switcher = {
+        "lumberyard":lumberyard,
+        "farm":farm,
+        "ironMine":ironMine,
+        "wood":lumberyard,
+        "food":farm,
+        "iron":ironMine,
+        "silver":silverMine,
+        }
+    return switcher.get(text, None)
+
+def getLength(image):
+    x=0
+    try:
+        
+        mm =  findAll(image)
+        while mm.hasNext():
+            mm.next()
+            #finding existing patterns
+            x+=1
+    except:
+        pass
+    return x
+
 
 if debug:    
     instance = Farm(1)
-    #instance.start()
-    list = [farm]
-    #closeEmu()
-    #instance.spiritMines()
-    #instance.train()
-    
-    #instance.spiritMines()
-    instance.perfAction("wall")
+    launchEmu(3)
+    \instance.perfAction("gold")
+
 while not debug:
     try:
         error = "------Unhandled exception------"
         launchEmu(counter)
-        instance = Farm(1)
+        instance = Farm(counter)
         instance.start()
         for action in instance.settings["actions"]:
             instance.perfAction(action)
         error = ""
         closeEmu()
-        writeLog(".")
+        writeLog(debug, instance.number, ".")
     except FindFailed, e:
         error = str(e)
         closeEmu()
