@@ -2,7 +2,7 @@ from fileOperations import *
 
 debug = True
 Settings.MoveMouseDelay = 0.8
-counter = 2
+counter = 1
 minInstance = 1
 maxInstance = 5
 error = ""
@@ -764,7 +764,8 @@ if debug:
     instance = Farm(counter)
     #launchEmu(3)
     #instance.perfAction("gold")
-    instance.miningLoot()
+    #instance.miningLoot()
+    writeLog(debug, counter, str(instance.settings))
 
 while not debug:
     try:

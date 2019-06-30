@@ -74,7 +74,7 @@
 
 debug = True
 Settings.MoveMouseDelay = <span class="dig">0.8</span>
-counter = <span class="dig">2</span>
+counter = <span class="dig">1</span>
 minInstance = <span class="dig">1</span>
 maxInstance = <span class="dig">5</span>
 error = <span class="str">""</span>
@@ -836,7 +836,8 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
     instance = Farm(counter)
     <span class="cmt">#launchEmu(3)
 </span>    <span class="cmt">#instance.perfAction("gold")
-</span>    instance.miningLoot()
+</span>    <span class="cmt">#instance.miningLoot()
+</span>    writeLog(debug, counter, str(instance.settings))
 
 <span class="kw">while</span> <span class="kw">not</span> debug:
     <span class="kw">try</span>:

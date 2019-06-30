@@ -21,18 +21,17 @@ def makeNumberIfNumber(numberString):
         return numberString
 
 def loadSettings(counter):
+    default = importSettings("default.txt")
     try:
-        return importSettings(str(counter)+".txt")
+        return importSettings(str(counter)+".txt", default)
     except:
         return importSettings("default.txt")
 
 
-def importSettings(fileName):
-    print 'Reading settings'
+def importSettings(fileName, settings = {}):
     f = open(fileName, "r")
     settingsLines = f.read().split("\n")
     f.close()
-    settings = {}
     for line in settingsLines:
         if len(line.strip()) == 0:
             continue
@@ -46,5 +45,5 @@ def importSettings(fileName):
             settingValue = [makeNumberIfNumber(x.strip()) for x in settingValue.split(',')]
             
         settings[settingName] = makeNumberIfNumber(settingValue)
-    
     return  settings
+
