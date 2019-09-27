@@ -20,14 +20,6 @@ def makeNumberIfNumber(numberString):
     except:
         return numberString
 
-def loadSettings(counter):
-    default = importSettings("default.txt")
-    try:
-        return importSettings(str(counter)+".txt", default)
-    except:
-        return importSettings("default.txt")
-
-
 def importSettings(fileName, settings = {}):
     f = open(fileName, "r")
     settingsLines = f.read().split("\n")
@@ -47,3 +39,12 @@ def importSettings(fileName, settings = {}):
         settings[settingName] = makeNumberIfNumber(settingValue)
     return  settings
 
+def loadSettings(counter):
+    default = importSettings("default.txt")
+    try:
+        return importSettings(str(counter)+".txt", default)
+    except:
+        return importSettings("default.txt")
+
+def test_settings(txt):
+    return False

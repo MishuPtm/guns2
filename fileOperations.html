@@ -92,19 +92,10 @@
     <span class="kw">except</span>:
         <span class="kw">return</span> numberString
 
-<span class="kw">def</span> loadSettings(counter):
-    default = importSettings(<span class="str">"default.txt"</span>)
-    <span class="kw">try</span>:
-        <span class="kw">return</span> importSettings(str(counter)+<span class="str">".txt"</span>, default)
-    <span class="kw">except</span>:
-        <span class="kw">return</span> importSettings(<span class="str">"default.txt"</span>)
-
-
 <span class="kw">def</span> importSettings(fileName, settings = {}):
     f = open(fileName, <span class="str">"r"</span>)
     settingsLines = f.read().split(<span class="str">"\n"</span>)
     f.close()
-    settings = {}
     <span class="kw">for</span> line <span class="kw">in</span> settingsLines:
         <span class="kw">if</span> len(line.strip()) == <span class="dig">0</span>:
             <span class="kw">continue</span>
@@ -118,8 +109,17 @@
 </span>            settingValue = [makeNumberIfNumber(x.strip()) <span class="kw">for</span> x <span class="kw">in</span> settingValue.split(<span class="str">','</span>)]
 
         settings[settingName] = makeNumberIfNumber(settingValue)
-    <span class="kw">print</span> settings
     <span class="kw">return</span>  settings
+
+<span class="kw">def</span> loadSettings(counter):
+    default = importSettings(<span class="str">"default.txt"</span>)
+    <span class="kw">try</span>:
+        <span class="kw">return</span> importSettings(str(counter)+<span class="str">".txt"</span>, default)
+    <span class="kw">except</span>:
+        <span class="kw">return</span> importSettings(<span class="str">"default.txt"</span>)
+
+<span class="kw">def</span> test_settings(txt):
+    <span class="kw">return</span> False
 </pre>
 </body>
 </html>
