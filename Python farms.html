@@ -72,8 +72,8 @@
 <pre class="sikuli-code">
 <span class="kw">from</span> fileOperations <span class="kw">import</span> *
 
-updateBool = True
-debug = False
+updateBool = False
+debug = True
 Settings.MoveMouseDelay = <span class="dig">0.8</span>
 counter = <span class="dig">1</span>
 minInstance = <span class="dig">1</span>
@@ -100,6 +100,7 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
         self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">3</span>)
         self.honorChallenge()
+        self.curiosityCabinet()
         tryClicks(fadedIconX, <span class="dig">2</span>, <span class="dig">3</span>, <span class="dig">5</span>)
         self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">4</span>)
@@ -118,26 +119,24 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
             <span class="skw">wait</span>(<span class="dig">5</span>)
 
     <span class="kw">def</span> donate(self):
-        allianceIcon = Pattern(<img src="allianceIcon.png" />).similar(<span class="dig">0.74</span>)
-        donations = <img src="donations.png" />
-        star = <img src="star.png" />
-        donateBtn = Pattern(<img src="donateBtn.png" />).similar(<span class="dig">0.77</span>).targetOffset(<span class="dig">65</span>,<span class="dig">278</span>)
-        stopDonate = Pattern(<img src="stopDonate.png" />).similar(<span class="dig">0.97</span>)
-        abort = <img src="abort.png" />
-        xBtn = Pattern(<img src="xBtn.png" />).similar(<span class="dig">0.92</span>)
-        self.tryClick(allianceIcon, <span class="dig">1</span>)
-        <span class="skw">wait</span>(<span class="dig">2</span>)
-        self.tryClick(donations, <span class="dig">1</span>)
-        <span class="skw">wait</span>(<span class="dig">5</span>)
-        self.tryClick(star, <span class="dig">1</span>)
-        <span class="skw">wait</span>(<span class="dig">2</span>)
-        backupCounter = <span class="dig">0</span>
-        <span class="kw">while</span> <span class="kw">not</span> exists(stopDonate, <span class="dig">0.5</span>) <span class="kw">and</span> backupCounter &lt;<span class="dig">27</span>:
-            self.tryClick(donateBtn, <span class="dig">1</span>)
-            backupCounter +=<span class="dig">1</span>
-        self.tryClick(xBtn, <span class="dig">1</span>)
+        donation_star = <img src="donation_star.png" />
+        icon_alliance = <img src="icon_alliance.png" />
+
+        alliance_donation = <img src="alliance_donation.png" />
+        donation_btn = Pattern(<img src="donation_btn.png" />).targetOffset(<span class="dig">1</span>,<span class="dig">39</span>)
+
+        self.tryClick(icon_alliance, <span class="dig">10</span>)
+        self.tryClick(alliance_donation, <span class="dig">10</span>)
+        self.tryClick(donation_star, <span class="dig">10</span>)
+        <span class="skw">wait</span>(<span class="dig">3</span>)
+        <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">24</span>):
+            <span class="kw">if</span> self.tryClick(donation_btn, <span class="dig">0.5</span>):
+                <span class="skw">wait</span>(<span class="dig">1</span>)
+            <span class="kw">else</span>:
+                <span class="kw">break</span>
+        self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
-        self.tryClick(xBtn, <span class="dig">1</span>)
+        self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
         self.tryClick(xIcon, <span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
@@ -317,6 +316,10 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
         ovSpirit = Pattern(<img src="ovSpirit.png" />).similar(<span class="dig">0.81</span>).targetOffset(<span class="dig">194</span>,<span class="dig">0</span>)
         ovGift = Pattern(<img src="ovGift.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
         ovDoc = Pattern(<img src="ovDoc.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
+        ovExchange = Pattern(<img src="ovExchange.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
+        ovRecruit = Pattern(<img src="ovRecruit.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
+        ovAcademy = Pattern(<img src="ovAcademy.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
+        ovDaily = Pattern(<img src="ovDaily.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
         image = ovDoc
         <span class="kw">try</span>:
             image = Pattern(<span class="str">"images\\"</span>+item).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">200</span>,<span class="dig">0</span>)
@@ -339,8 +342,8 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
         expandOverview = <img src="expandOverview.png" />
         collapseOverview = <img src="collapseOverview.png" />
         <span class="kw">if</span> self.tryClick(expandOverview, <span class="dig">5</span>):
-            <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">5</span>):
-                self.swipe(Pattern(<img src="1557431003983.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">0</span>,<span class="dig">10</span>),Pattern(<img src="1557431003983.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">0</span>,<span class="dig">180</span>))
+            <span class="kw">for</span> i <span class="kw">in</span> range(<span class="dig">3</span>):
+                self.swipe(Pattern(<img src="1557431003983.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">0</span>,<span class="dig">25</span>),Pattern(<img src="1557431003983.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">0</span>,<span class="dig">180</span>))
             scrolls = <span class="dig">6</span>
             <span class="skw">wait</span>(Pattern(<img src="1557431003983.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">0</span>,<span class="dig">180</span>),<span class="dig">10</span>)
             <span class="kw">while</span> scrolls&gt;<span class="dig">0</span>:
@@ -785,10 +788,13 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
 
 
     <span class="kw">def</span> getAvailableMarch(self):
+        march_moving = <img src="march_moving.png" />
+        march_stationary = Pattern(<img src="march_stationary.png" />).similar(<span class="dig">0.60</span>)
+        march_extend = Pattern(<img src="march_extend.png" />).similar(<span class="dig">0.59</span>)
         x=<span class="dig">0</span>
-        self.tryClick(Pattern(<img src="1550403558215.png" />).similar(<span class="dig">0.55</span>), <span class="dig">2</span>)
+        self.tryClick(march_extend, <span class="dig">2</span>)
         <span class="kw">try</span>:
-            mm =  findAll(Pattern(<img src="1544560966058.png" />).similar(<span class="dig">0.69</span>))
+            mm =  findAll(march_moving)
             <span class="kw">while</span> mm.hasNext():
                 mm.next()
                 <span class="cmt">#finding troops on the move
@@ -796,7 +802,7 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
         <span class="kw">except</span>:
             <span class="kw">pass</span>
         <span class="kw">try</span>:
-            nn = findAll(Pattern(<img src="1544560981707.png" />).similar(<span class="dig">0.57</span>))
+            nn = findAll(march_stationary)
             <span class="kw">while</span> nn.hasNext(): <span class="cmt"># loop as long there is a first and more matches</span>
                 <span class="cmt">#finding troops gathering
 </span>                nn.next()
@@ -904,11 +910,8 @@ callBack = Pattern(<img src="callBack.png" />).similar(<span class="dig">0.65</s
 
 <span class="kw">if</span> debug:
     instance = Farm(counter)
-    instance.perfAction(<span class="str">"gold"</span>)
-    <span class="kw">if</span> False:
-        writeLog(debug, counter, <span class="str">"true"</span>)
-    <span class="kw">else</span>:
-        writeLog(debug, counter, <span class="str">"false"</span>)
+    instance.perfAction(<span class="str">"donate"</span>)
+
     <span class="cmt">#instance.findTopLeft()
 </span>    <span class="cmt">#launchEmu(3)
 </span>    <span class="cmt">#instance.perfAction("gold")

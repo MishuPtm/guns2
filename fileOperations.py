@@ -2,7 +2,7 @@ import datetime
 
 
 def writeLog(debug, counter, message):
-    logFilename = "logs\\" + unicode(datetime.datetime.now().date()).replace(':', '-')+".txt" 
+    logFilename = "logs\\" + unicode(datetime.datetime.now().date()).replace(':', '-') + ".txt"
     if debug:
         logFilename = "debug.txt"
     if message == ".":
@@ -11,8 +11,10 @@ def writeLog(debug, counter, message):
         f.close()
     else:
         f = open(logFilename, "a+")
-        f.write("[" + str(datetime.datetime.now().time()) + "][Farm " + str(counter) + "]"+ message + "\n")
+        f.write("[" + str(datetime.datetime.now().time()) + "][Farm " + str(counter) + "]" + message + "\n")
         f.close()
+
+
 def makeNumberIfNumber(numberString):
     try:
         number = float(numberString)
@@ -20,7 +22,10 @@ def makeNumberIfNumber(numberString):
     except:
         return numberString
 
-def importSettings(fileName, settings = {}):
+
+def importSettings(fileName, settings=None):
+    if settings is None:
+        settings = {}
     f = open(fileName, "r")
     settingsLines = f.read().split("\n")
     f.close()
@@ -33,18 +38,20 @@ def importSettings(fileName, settings = {}):
         if settingValue.lower() in ["true", "false"]:
             settingValue = settingValue == "true"
         elif "," in settingValue:
-            #this means setting is an array
+            # this means setting is an array
             settingValue = [makeNumberIfNumber(x.strip()) for x in settingValue.split(',')]
-            
+
         settings[settingName] = makeNumberIfNumber(settingValue)
-    return  settings
+    return settings
+
 
 def loadSettings(counter):
     default = importSettings("default.txt")
     try:
-        return importSettings(str(counter)+".txt", default)
+        return importSettings(str(counter) + ".txt", default)
     except:
         return importSettings("default.txt")
+
 
 def test_settings(txt):
     return False

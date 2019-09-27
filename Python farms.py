@@ -1,7 +1,7 @@
 from fileOperations import *
 
-updateBool = True
-debug = False
+updateBool = False
+debug = True
 Settings.MoveMouseDelay = 0.8
 counter = 1
 minInstance = 1
@@ -28,6 +28,7 @@ class Farm:
         self.tryClick(xIcon, 1)
         wait(3)
         self.honorChallenge()
+        self.curiosityCabinet()
         tryClicks(fadedIconX, 2, 3, 5)
         self.tryClick(xIcon, 1)
         wait(4)
@@ -46,26 +47,24 @@ class Farm:
             wait(5)
             
     def donate(self):
-        allianceIcon = Pattern("allianceIcon.png").similar(0.74)
-        donations = "donations.png"
-        star = "star.png"
-        donateBtn = Pattern("donateBtn.png").similar(0.77).targetOffset(65,278)
-        stopDonate = Pattern("stopDonate.png").similar(0.97)
-        abort = "abort.png"
-        xBtn = Pattern("xBtn.png").similar(0.92)
-        self.tryClick(allianceIcon, 1)
-        wait(2)
-        self.tryClick(donations, 1)
-        wait(5)
-        self.tryClick(star, 1)
-        wait(2)
-        backupCounter = 0
-        while not exists(stopDonate, 0.5) and backupCounter <27:
-            self.tryClick(donateBtn, 1)
-            backupCounter +=1
-        self.tryClick(xBtn, 1)
+        donation_star = "donation_star.png"
+        icon_alliance = "icon_alliance.png"
+        
+        alliance_donation = "alliance_donation.png"
+        donation_btn = Pattern("donation_btn.png").targetOffset(1,39)
+        
+        self.tryClick(icon_alliance, 10)
+        self.tryClick(alliance_donation, 10)
+        self.tryClick(donation_star, 10)
+        wait(3)
+        for i in range(24):
+            if self.tryClick(donation_btn, 0.5):
+                wait(1)
+            else:
+                break
+        self.tryClick(xIcon, 1)
         wait(1)
-        self.tryClick(xBtn, 1)
+        self.tryClick(xIcon, 1)
         wait(1)
         self.tryClick(xIcon, 1)
         wait(1)
@@ -245,6 +244,10 @@ class Farm:
         ovSpirit = Pattern("ovSpirit.png").similar(0.81).targetOffset(194,0)
         ovGift = Pattern("ovGift.png").similar(0.80).targetOffset(200,0)
         ovDoc = Pattern("ovDoc.png").similar(0.80).targetOffset(200,0)
+        ovExchange = Pattern("ovExchange.png").similar(0.80).targetOffset(200,0)
+        ovRecruit = Pattern("ovRecruit.png").similar(0.80).targetOffset(200,0)
+        ovAcademy = Pattern("ovAcademy.png").similar(0.80).targetOffset(200,0)
+        ovDaily = Pattern("ovDaily.png").similar(0.80).targetOffset(200,0)
         image = ovDoc
         try:
             image = Pattern("images\\"+item).similar(0.80).targetOffset(200,0)
@@ -267,8 +270,8 @@ class Farm:
         expandOverview = "expandOverview.png"
         collapseOverview = "collapseOverview.png"
         if self.tryClick(expandOverview, 5):
-            for i in range(5):
-                self.swipe(Pattern("1557431003983.png").similar(0.80).targetOffset(0,10),Pattern("1557431003983.png").similar(0.80).targetOffset(0,180))
+            for i in range(3):
+                self.swipe(Pattern("1557431003983.png").similar(0.80).targetOffset(0,25),Pattern("1557431003983.png").similar(0.80).targetOffset(0,180))
             scrolls = 6
             wait(Pattern("1557431003983.png").similar(0.80).targetOffset(0,180),10)
             while scrolls>0:
@@ -713,10 +716,13 @@ class Farm:
 
     
     def getAvailableMarch(self):
+        march_moving = "march_moving.png"
+        march_stationary = Pattern("march_stationary.png").similar(0.60)
+        march_extend = Pattern("march_extend.png").similar(0.59)
         x=0
-        self.tryClick(Pattern("1550403558215.png").similar(0.55), 2)
+        self.tryClick(march_extend, 2)
         try:
-            mm =  findAll(Pattern("1544560966058.png").similar(0.69))
+            mm =  findAll(march_moving)
             while mm.hasNext():
                 mm.next()
                 #finding troops on the move
@@ -724,7 +730,7 @@ class Farm:
         except:
             pass
         try:
-            nn = findAll(Pattern("1544560981707.png").similar(0.57)) 
+            nn = findAll(march_stationary) 
             while nn.hasNext(): # loop as long there is a first and more matches
                 #finding troops gathering
                 nn.next()
@@ -832,11 +838,8 @@ def getLength(image):
 
 if debug:    
     instance = Farm(counter)
-    instance.perfAction("gold")
-    if False:
-        writeLog(debug, counter, "true")
-    else:
-        writeLog(debug, counter, "false")
+    instance.perfAction("donate")
+
     #instance.findTopLeft()
     #launchEmu(3)
     #instance.perfAction("gold")
